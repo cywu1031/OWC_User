@@ -6,6 +6,7 @@ import { AnalysisPage } from '../pages/analysis/analysis';
 import { DashboardPage } from '../pages/dashboard/dashboard';
 import { SettingsPage } from '../pages/settings/settings';
 import { TabsPage } from '../pages/tabs/tabs';
+import { RealTimeChartPage } from '../pages/real-time-chart/real-time-chart'
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import { TabsPage } from '../pages/tabs/tabs';
     AnalysisPage,
     DashboardPage,
     SettingsPage,
-    TabsPage
+    TabsPage,
+    RealTimeChartPage
   ],
   imports: [
     IonicModule.forRoot(MyApp)
@@ -26,7 +28,8 @@ import { TabsPage } from '../pages/tabs/tabs';
     AnalysisPage,
     DashboardPage,
     SettingsPage,
-    TabsPage
+    TabsPage,
+    RealTimeChartPage
   ],
   providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}]
 })
