@@ -24386,3 +24386,11 @@ ion-navbar.toolbar {
     padding-top: calc(16px + 20px);
   }
 }
+
+page-history .scroll-content {
+  background-color: #f4f4f4;
+}
+
+page-history ion-card-header {
+  font-weight: bold;
+}

@@ -21,6 +21,7 @@
     "@angular/platform-server": "2.2.1",
     "@ionic/storage": "1.1.7",
     "body-parser": "^1.17.1",
+    "chart.js": "^2.5.0",
     "cors": "^2.8.1",
     "express": "^4.15.2",
     "ionic-angular": "2.1.0",

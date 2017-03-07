@@ -8,12 +8,22 @@
 
 <ion-content padding>
     <ion-item>
-      <ion-label>Start Time</ion-label>
+      <ion-label>Start</ion-label>
       <ion-datetime displayFormat="MMM DD YYYY"></ion-datetime>
     </ion-item>
 
     <ion-item>
-      <ion-label>End Time</ion-label>
+      <ion-label>End</ion-label>
       <ion-datetime displayFormat="MMM DD YYYY"></ion-datetime>
     </ion-item>
+
+    <ion-card>
+      <ion-card-header>
+        Bar Chart
+      </ion-card-header>
+      <ion-card-content>
+        <canvas #barCanvas></canvas>
+      </ion-card-content>
+    </ion-card>
+
 </ion-content>
