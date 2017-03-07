@@ -1,21 +1,15 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>
-      History
-    </ion-title>
+    <ion-title>History</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="presentPopover($event)">
+        <ion-icon name="more"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-    <ion-item>
-        <ion-label>Historical data for</ion-label>
-        <ion-select>
-          <ion-option value="Area1" selected="true">Area1</ion-option>
-          <ion-option value="Area2">Area2</ion-option>
-          <ion-option value="Area3">Area3</ion-option>
-        </ion-select>
-    </ion-item>
-
     <ion-item>
       <ion-label>Start</ion-label>
       <ion-datetime displayFormat="MMM DD YYYY"></ion-datetime>

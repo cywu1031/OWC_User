@@ -4,7 +4,7 @@ import { MyApp } from './app.component';
 import { HistoryPage } from '../pages/history/history';
 import { AnalysisPage } from '../pages/analysis/analysis';
 import { DashboardPage } from '../pages/dashboard/dashboard';
-import { SettingsPage } from '../pages/settings/settings';
+import { ManagementPage } from '../pages/management/management';
 import { TabsPage } from '../pages/tabs/tabs';
 import { RealTimeChartPage } from '../pages/real-time-chart/real-time-chart'
 
@@ -14,7 +14,7 @@ import { RealTimeChartPage } from '../pages/real-time-chart/real-time-chart'
     HistoryPage,
     AnalysisPage,
     DashboardPage,
-    SettingsPage,
+    ManagementPage,
     TabsPage,
     RealTimeChartPage
   ],
@@ -27,7 +27,7 @@ import { RealTimeChartPage } from '../pages/real-time-chart/real-time-chart'
     HistoryPage,
     AnalysisPage,
     DashboardPage,
-    SettingsPage,
+    ManagementPage,
     TabsPage,
     RealTimeChartPage
   ],
