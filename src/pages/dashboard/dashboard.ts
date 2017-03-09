@@ -1,75 +1,56 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 
 import { NavController } from 'ionic-angular';
 
-import { RealTimeChartPage } from '../real-time-chart/real-time-chart'
+import { ManualPage } from '../manual/manual'
 
 @Component({
   selector: 'page-dashboard',
   templateUrl: 'dashboard.html'
 })
 export class DashboardPage {
-  sensors: any[];
-  weathers: any[];
+  sensor_data: any[];
+  sensor_count = 3;
+  @ViewChild('soilMoistureCanvas') soilMoistureCanvas;
+  @ViewChild('temperatureCanvas') temperatureCanvas;
+  @ViewChild('humidityCanvas') humidityCanvas;
+
+  weather_data: any[];
+  weather_count = 3;
+  @ViewChild('percipitationCanvas') percipitationCanvas;
+  @ViewChild('windSpeedCanvas') windSpeedCanvas;
+  @ViewChild('solarRadiationCanvas') solarRadiationCanvas;
 
   constructor(public navCtrl: NavController) {
-    this.initSensors();
-    this.initWeathers();
+    this.initSensorData();
+    this.initWeatherData();
   }
 
-  initSensors() {
-    this.sensors = [];
+  initSensorData() {
+    this.sensor_data = [];
 
-    this.sensors.push({
-        name: "Soil moisture",
-        latest: "20",
-        last10: []
-    });
-
-    this.sensors.push({
-        name: "Temperature",
-        latest: "32",
-        last10: []
-    });
-
-    this.sensors.push({
-        name: "Humidity",
-        latest: "40",
-        last10: []
-    });
+    // Soil moisture, Temperature, Humidity
+    for (var i = 0; i < this.sensor_count; ++i) {
+        this.sensor_data.push({
+            latest: "",
+            last10: []
+        });
+    }
   }
 
-  initWeathers() {
-    this.weathers = [];
+  initWeatherData() {
+    this.weather_data = [];
 
-    this.weathers.push({
-        name: "Percipitation",
-        latest: "60",
-        last10: []
-    });
-
-    this.weathers.push({
-        name: "Wind speed",
-        latest: "33",
-        last10: []
-    });
-
-    this.weathers.push({
-        name: "Solar radiation",
-        latest: "67",
-        last10: []
-    });
+     // Percipitation, Wind speed, Solar radiation
+    for (var i = 0; i < this.weather_count; ++i) {
+        this.weather_data.push({
+            latest: "",
+            last10: []
+        });
+    }
   }
 
-  clickSensorButton(sensor) {
-    this.navCtrl.push(RealTimeChartPage, {
-        item: sensor
-    })
-  }
-
-  clickWeatherButton(weather) {
-    this.navCtrl.push(RealTimeChartPage, {
-        item: weather
-    })
+  clickManualButton(sensor) {
+    this.navCtrl.push(ManualPage, {})
   }
 }

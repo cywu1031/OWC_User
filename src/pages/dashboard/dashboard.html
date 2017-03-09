@@ -12,14 +12,47 @@
 <ion-content padding>
   <ion-list>
     <ion-list-header>
+      Control
+    </ion-list-header>
+
+    <ion-item>
+          <ion-label>Manual Irrigation</ion-label>
+          <ion-toggle checked="false"></ion-toggle>
+    </ion-item>
+
+  </ion-list>
+
+  <ion-list>
+    <ion-list-header>
       Sensors
     </ion-list-header>
 
-    <ion-item *ngFor="let sensor of sensors">
-      <ion-icon name="ios-warning" item-left></ion-icon>
-      <button ion-button clear (click)="clickSensorButton(sensor)">{{sensor.name}}</button>
-      <ion-badge item-right>{{sensor.latest}}</ion-badge>
-    </ion-item>
+    <ion-card>
+      <ion-card-header>
+        Soil moisture
+      </ion-card-header>
+      <ion-card-content>
+        <canvas #soilMoistureCanvas></canvas>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-header>
+        Temperature
+      </ion-card-header>
+      <ion-card-content>
+        <canvas #temperatureCanvas></canvas>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-header>
+        Humidity
+      </ion-card-header>
+      <ion-card-content>
+        <canvas #humidityCanvas></canvas>
+      </ion-card-content>
+    </ion-card>
   </ion-list>
 
   <ion-list>
@@ -27,22 +60,32 @@
       Weather
     </ion-list-header>
 
-    <ion-item *ngFor="let weather of weathers">
-      <ion-icon name="ios-warning" item-left></ion-icon>
-      <button ion-button clear (click)="clickWeatherButton(weather)">{{weather.name}}</button>
-      <ion-badge item-right>{{weather.latest}}</ion-badge>
-    </ion-item>
-  </ion-list>
+    <ion-card>
+      <ion-card-header>
+        Percipitation
+      </ion-card-header>
+      <ion-card-content>
+        <canvas #percipitationCanvas></canvas>
+      </ion-card-content>
+    </ion-card>
 
-  <ion-list>
-    <ion-list-header>
-      Control
-    </ion-list-header>
+    <ion-card>
+      <ion-card-header>
+        Wind speed
+      </ion-card-header>
+      <ion-card-content>
+        <canvas #windSpeedCanvas></canvas>
+      </ion-card-content>
+    </ion-card>
 
-    <ion-item>
-      <ion-label>Manual irrigation</ion-label>
-      <ion-toggle></ion-toggle>
-    </ion-item>
+    <ion-card>
+      <ion-card-header>
+        Solar radiation
+      </ion-card-header>
+      <ion-card-content>
+        <canvas #solarRadiationCanvas></canvas>
+      </ion-card-content>
+    </ion-card>
   </ion-list>
 
 </ion-content>
