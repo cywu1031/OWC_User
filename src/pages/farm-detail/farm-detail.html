@@ -1,0 +1,41 @@
+<!--
+  Generated template for the FarmDetail page.
+
+  See http://ionicframework.com/docs/v2/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>{{farm.name}}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+    <ion-item>
+        <h2>Name:</h2>
+        <ion-badge item-right color="primary">{{farm.name}}</ion-badge>
+    </ion-item>
+
+    <ion-item>
+        <h2>Stage:</h2>
+        <ion-badge item-right color="primary">{{farm.stage}}</ion-badge>
+    </ion-item>
+
+    <ion-item>
+        <h2>Soil type:</h2>
+        <ion-badge item-right color="primary">{{farm.soil_type}}</ion-badge>
+    </ion-item>
+
+    <ion-item>
+        <h2>Field size:</h2>
+        <ion-badge item-right color="primary">{{farm.field_size}}</ion-badge>
+    </ion-item>
+
+    <ion-item>
+        <h2>Description:</h2>
+        <ion-badge item-right color="primary">{{farm.description}}</ion-badge>
+    </ion-item>
+</ion-content>

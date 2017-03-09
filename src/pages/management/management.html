@@ -6,13 +6,29 @@
 
 <ion-content>
     <ion-list>
-      <ion-item>
-        <ion-label>Crop type</ion-label>
-        <ion-select>
-          <ion-option value="Lettuce" selected="true">Lettuce</ion-option>
-          <ion-option value="Spinach">Spinach</ion-option>
-          <ion-option value="Broccoli">Broccoli</ion-option>
-        </ion-select>
-      </ion-item>
+      <ion-list-header>Your farms</ion-list-header>
+
+      <ion-item-sliding *ngFor="let farm of farms">
+        <button ion-item (click)="farmSelected(farm)">
+          <h2>{{ farm.name }}</h2>
+          <p>{{ farm.stage }}</p>
+        </button> --> 
+        <ion-item-options side="right">
+          <button ion-button color="secondary" (click)="updateSelected(farm)">
+            <ion-icon name="ios-create"></ion-icon>
+            Update
+          </button>
+          <button ion-button color="danger" (click)="deleteSelected(farm)">
+            <ion-icon name="ios-trash"></ion-icon>
+            Delete
+          </button>
+        </ion-item-options>
+      </ion-item-sliding>
+
     </ion-list>
+
+    <ion-fab right bottom>
+      <button ion-fab  (click)="createSelected()"><ion-icon name="ios-add"></ion-icon></button>
+    </ion-fab>
+
 </ion-content>

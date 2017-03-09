@@ -2,8 +2,6 @@ import { Component, ViewChild } from '@angular/core';
 
 import { NavController } from 'ionic-angular';
 
-import { ManualPage } from '../manual/manual'
-
 @Component({
   selector: 'page-dashboard',
   templateUrl: 'dashboard.html'
@@ -48,9 +46,5 @@ export class DashboardPage {
             last10: []
         });
     }
-  }
-
-  clickManualButton(sensor) {
-    this.navCtrl.push(ManualPage, {})
   }
 }
