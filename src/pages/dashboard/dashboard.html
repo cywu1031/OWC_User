@@ -15,11 +15,14 @@
       Control
     </ion-list-header>
 
-    <ion-item>
-          <ion-label>Manual Irrigation</ion-label>
-          <ion-toggle checked="false"></ion-toggle>
+    <ion-item clear>
+      <ion-label>Manual Irrigation</ion-label>
+      <ion-toggle checked="false" [(ngModel)]="manual" (ionChange)="toggleChanged()"></ion-toggle>
     </ion-item>
 
+    <ion-item>
+      <button ion-button round full color="{{irrigation_button_color}}" *ngIf="manual" (click)="irrigateSelected()">{{irrigation_button_caption}}</button>
+    </ion-item>
   </ion-list>
 
   <ion-list>
