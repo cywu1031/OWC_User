@@ -8,6 +8,8 @@ import { FarmDetailPage } from '../farm-detail/farm-detail';
 
 import { FarmEditPage } from '../farm-edit/farm-edit';
 
+import { ShareService } from '../tabs/shareservice';
+
 @Component({
   selector: 'page-management',
   templateUrl: 'management.html'
@@ -15,8 +17,9 @@ import { FarmEditPage } from '../farm-edit/farm-edit';
 export class ManagementPage {
   farms: any[];
 
-  constructor(public navCtrl: NavController, public alertCtrl: AlertController) {
+  constructor(public navCtrl: NavController, public alertCtrl: AlertController, public shareService: ShareService) {
       this.getFarms();
+      this.shareService.title = 'Management';
   }
 
   ionViewDidEnter() {
@@ -51,8 +54,6 @@ export class ManagementPage {
       func: 'Update',
       farm: farm
     })
-
-    alert('in');
   }
 
   deleteSelected(farm) {

@@ -2,6 +2,8 @@ import { Component, ViewChild } from '@angular/core';
 
 import { NavController } from 'ionic-angular';
 
+import { ShareService } from '../tabs/shareservice'
+
 @Component({
   selector: 'page-dashboard',
   templateUrl: 'dashboard.html'
@@ -23,12 +25,13 @@ export class DashboardPage {
   irrigation_button_caption: any;
   irrigation_button_color: any;
 
-  constructor(public navCtrl: NavController) {
+  constructor(public navCtrl: NavController, public shareService: ShareService) {
     this.irrigation_button_color = '';
     this.manual = false;
     this.irrigation_button_caption = 'Start';
     this.initSensorData();
     this.initWeatherData();
+    this.shareService.title = 'Dashboard';
   }
 
   initSensorData() {

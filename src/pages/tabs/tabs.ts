@@ -1,12 +1,15 @@
 import { Component } from '@angular/core';
+import { Tab } from 'ionic-angular';
 
 import { DashboardPage } from '../dashboard/dashboard';
 import { HistoryPage } from '../history/history';
 import { AnalysisPage } from '../analysis/analysis';
 import { ManagementPage } from '../management/management';
+import { ShareService } from './shareservice';
 
 @Component({
-  templateUrl: 'tabs.html'
+  templateUrl: 'tabs.html',
+  providers: [ShareService]
 })
 export class TabsPage {
   // this tells the tabs component which Pages
@@ -16,7 +19,9 @@ export class TabsPage {
   tab3Root: any = AnalysisPage;
   tab4Root: any = ManagementPage;
 
-  constructor() {
+  constructor(public shareService: ShareService) {
+  }
 
+  tabChange(tab: Tab){
   }
 }

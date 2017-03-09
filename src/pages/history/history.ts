@@ -4,6 +4,8 @@ import { NavController } from 'ionic-angular';
 
 import { Chart } from 'chart.js';
 
+import { ShareService } from '../tabs/shareservice';
+
 @Component({
   selector: 'page-history',
   templateUrl: 'history.html'
@@ -17,8 +19,8 @@ export class HistoryPage {
   doughnutChart: any;
   lineChart: any;
   
-  constructor(public navCtrl: NavController) {
-
+  constructor(public navCtrl: NavController, public shareService: ShareService) {
+      this.shareService.title = 'History';
   }
 
   ionViewDidLoad() {

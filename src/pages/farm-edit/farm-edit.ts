@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { AlertController } from 'ionic-angular';
-
 /*
   Generated class for the FarmEdit page.
 
@@ -10,7 +9,7 @@ import { AlertController } from 'ionic-angular';
 */
 @Component({
   selector: 'page-farm-edit',
-  templateUrl: 'farm-edit.html'
+  templateUrl: 'farm-edit.html',
 })
 export class FarmEditPage {
   farm: any;
@@ -18,7 +17,8 @@ export class FarmEditPage {
   func: any;
   color: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, 
+              public alertCtrl: AlertController) {
       this.func = navParams.get('func');
 
       if ('Create' === this.func) {
@@ -34,7 +34,7 @@ export class FarmEditPage {
       } else {
           this.origin_farm = navParams.get('farm');
           this.farm = Object.create(this.origin_farm); // Make a copy of it
-          this.color = 'secondary'
+          this.color = 'secondary';
       }
   }
 
