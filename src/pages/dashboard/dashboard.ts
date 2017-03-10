@@ -2,7 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 
 import { NavController } from 'ionic-angular';
 
-import { ShareService } from '../tabs/shareservice'
+import { ShareService } from '../../providers/shareservice'
 
 @Component({
   selector: 'page-dashboard',

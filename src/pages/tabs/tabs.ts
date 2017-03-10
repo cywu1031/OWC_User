@@ -5,7 +5,7 @@ import { DashboardPage } from '../dashboard/dashboard';
 import { HistoryPage } from '../history/history';
 import { AnalysisPage } from '../analysis/analysis';
 import { ManagementPage } from '../management/management';
-import { ShareService } from './shareservice';
+import { ShareService } from '../../providers/shareservice';
 
 @Component({
   templateUrl: 'tabs.html',

@@ -4,7 +4,7 @@ import { NavController } from 'ionic-angular';
 
 import { Chart } from 'chart.js';
 
-import { ShareService } from '../tabs/shareservice';
+import { ShareService } from '../../providers/shareservice';
 
 @Component({
   selector: 'page-history',

@@ -8,7 +8,7 @@ import { FarmDetailPage } from '../farm-detail/farm-detail';
 
 import { FarmEditPage } from '../farm-edit/farm-edit';
 
-import { ShareService } from '../tabs/shareservice';
+import { ShareService } from '../../providers/shareservice';
 
 @Component({
   selector: 'page-management',
