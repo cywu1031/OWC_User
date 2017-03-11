@@ -17,7 +17,7 @@ import { ShareService } from '../../providers/shareservice';
 export class ManagementPage {
   farms: any[];
 
-  constructor(public navCtrl: NavController, public alertCtrl: AlertController, public shareService: ShareService) {
+  constructor(public navCtrl: NavController, public alertCtrl: AlertController, private shareService: ShareService) {
       this.getFarms();
       this.shareService.title = 'Management';
   }

@@ -1,8 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
 
-import { NavController } from 'ionic-angular';
+import { NavController, PopoverController } from 'ionic-angular';
 
-import { ShareService } from '../../providers/shareservice'
+import { ShareService } from '../../providers/shareservice';
 
 @Component({
   selector: 'page-dashboard',
@@ -25,7 +25,7 @@ export class DashboardPage {
   irrigation_button_caption: any;
   irrigation_button_color: any;
 
-  constructor(public navCtrl: NavController, public shareService: ShareService) {
+  constructor(public navCtrl: NavController, private shareService: ShareService, private popoverCtrl: PopoverController) {
     this.irrigation_button_color = '';
     this.manual = false;
     this.irrigation_button_caption = 'Start';

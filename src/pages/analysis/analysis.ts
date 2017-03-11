@@ -10,8 +10,7 @@ import { ShareService } from '../../providers/shareservice';
 })
 export class AnalysisPage {
 
-  constructor(public navCtrl: NavController, public shareService: ShareService) {
+  constructor(public navCtrl: NavController, private shareService: ShareService) {
       this.shareService.title = 'Analysis';
   }
-
 }

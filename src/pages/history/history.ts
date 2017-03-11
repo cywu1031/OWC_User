@@ -19,7 +19,7 @@ export class HistoryPage {
   doughnutChart: any;
   lineChart: any;
   
-  constructor(public navCtrl: NavController, public shareService: ShareService) {
+  constructor(public navCtrl: NavController, private shareService: ShareService) {
       this.shareService.title = 'History';
   }
 

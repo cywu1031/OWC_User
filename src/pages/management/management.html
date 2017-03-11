@@ -1,11 +1,11 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>{{shareService.title}}</ion-title>
-    <ion-buttons end>
-      <button ion-button icon-only (click)="presentPopover($event)">
-        <ion-icon name="more"></ion-icon>
-      </button>
-    </ion-buttons>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>
+      {{shareService.title}}
+    </ion-title>
   </ion-navbar>
 </ion-header>
 
