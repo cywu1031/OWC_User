@@ -10,7 +10,7 @@ import { AuthService } from '../../providers/auth-service';
 
 @Component({
   templateUrl: 'tabs.html',
-  providers: [ShareService, AuthService]
+  providers: [ShareService]
 })
 export class TabsPage {
   // this tells the tabs component which Pages
@@ -23,10 +23,9 @@ export class TabsPage {
   constructor(private shareService: ShareService, private authService: AuthService) {
   }
 
-  tabChange(tab: Tab){
+  ionViewDidLoad() {
   }
 
-  loginSelected() {
-    this.authService.isLogin = true;
+  tabChange(tab: Tab){
   }
 }

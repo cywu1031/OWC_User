@@ -1,22 +1,34 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { Platform, AlertController } from 'ionic-angular';
 import { StatusBar, Splashscreen } from 'ionic-native';
-
-import { TabsPage } from '../pages/tabs/tabs';
+import { AuthService } from '../providers/auth-service';
+import { LoginPage } from '../pages/login/login';
 
 @Component({
-  templateUrl: 'app.html'
+  templateUrl: 'app.html',
+  providers: [AuthService]
 })
 export class MyApp {
-  rootPage = TabsPage;
-  // rootPage = TabsPage
-  constructor(platform: Platform, public alertCtrl: AlertController) {
+  rootPage = LoginPage;
+  @ViewChild('myNav') nav;
+ 
+  constructor(platform: Platform, public alertCtrl: AlertController, private authService: AuthService) {
+    // Catch back button event for Android
+    // Prevent use going back to login page
+    platform.registerBackButtonAction(() => {
+    });
+
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       StatusBar.styleDefault();
       Splashscreen.hide();
     });
+
+  }
+
+  ngAfterViewInit() {
+    this.nav.push(LoginPage);
   }
 
   logoutSelected() {
@@ -33,7 +45,10 @@ export class MyApp {
         {
           text: 'Agree',
           handler: () => {
-            console.log('Agree clicked');
+            // 1. Logout
+
+            // 2. Goes to login page
+            this.nav.setRoot(LoginPage);
           }
         }
       ]

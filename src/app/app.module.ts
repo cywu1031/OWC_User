@@ -8,6 +8,7 @@ import { ManagementPage } from '../pages/management/management';
 import { TabsPage } from '../pages/tabs/tabs';
 import { FarmDetailPage } from '../pages/farm-detail/farm-detail';
 import { FarmEditPage } from '../pages/farm-edit/farm-edit'; 
+import { LoginPage } from '../pages/login/login';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { FarmEditPage } from '../pages/farm-edit/farm-edit';
     ManagementPage,
     TabsPage,
     FarmDetailPage,
-    FarmEditPage
+    FarmEditPage,
+    LoginPage
   ],
   imports: [
     IonicModule.forRoot(MyApp)
@@ -32,7 +34,8 @@ import { FarmEditPage } from '../pages/farm-edit/farm-edit';
     ManagementPage,
     TabsPage,
     FarmDetailPage,
-    FarmEditPage
+    FarmEditPage,
+    LoginPage
   ],
   providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}]
 })

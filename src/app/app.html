@@ -2,10 +2,26 @@
   <ion-toolbar>
     <ion-title>Menu</ion-title>
   </ion-toolbar>
-  <ion-list>
-    <button ion-item (click)="logoutSelected()">Logout</button>
-  </ion-list>
+  
+  <ion-list radio-group>
+    <ion-list-header>Your farms</ion-list-header>
 
+    <ion-item menuToggle>
+      <ion-label>Farm1</ion-label>
+      <ion-radio checked="true" value="Farm1"></ion-radio>
+    </ion-item>
+
+    <ion-item menuToggle>
+      <ion-label>Farm2</ion-label>
+      <ion-radio value="Farm2"></ion-radio>
+    </ion-item>
+  </ion-list>
+  
+  <ion-list>
+    <button ion-item menuToggle (click)="logoutSelected()">Logout</button>
+  </ion-list>
 </ion-menu>
 
-<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>
+<ion-nav #myNav>
+    <ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>
+</ion-nav>

@@ -1,28 +1,3 @@
-<<!-- ion-content>
-    <ion-header>
-      <ion-navbar>
-        <button menuToggle>
-          <ion-icon name="menu"></ion-icon>
-        </button>
-        <ion-title>Smart Farm</ion-title>
-      </ion-navbar>
-    </ion-header>
-
-    <ion-content>
-      <ion-item>
-        <ion-label floating>Username</ion-label>
-        <ion-input type="text" value=""></ion-input>
-      </ion-item>
-
-      <ion-item>
-        <ion-label floating>Password</ion-label>
-        <ion-input type="password"></ion-input>
-      </ion-item>
-        
-        <button ion-button round full (click)="loginSelected()">Login</button>
-    </ion-content>
-</ion-content> -->
-
 <ion-tabs (ionChange)="tabChange($event)">
   <ion-tab [root]="tab1Root" tabTitle="Dashboard" tabIcon="ios-home"></ion-tab>
   <ion-tab [root]="tab2Root" tabTitle="History" tabIcon="ios-albums"></ion-tab>
