@@ -21,14 +21,12 @@ export class DashboardPage {
   @ViewChild('windSpeedCanvas') windSpeedCanvas;
   @ViewChild('solarRadiationCanvas') solarRadiationCanvas;
 
+  @ViewChild('waterUsageCanvas') waterUsageCanvas;
+
   manual: any;
-  irrigation_button_caption: any;
-  irrigation_button_color: any;
 
   constructor(public navCtrl: NavController, private shareService: ShareService, private popoverCtrl: PopoverController) {
-    this.irrigation_button_color = '';
     this.manual = false;
-    this.irrigation_button_caption = 'Start';
     this.initSensorData();
     this.initWeatherData();
     this.shareService.title = 'Dashboard';
@@ -59,17 +57,10 @@ export class DashboardPage {
   }
 
   irrigateSelected() {
-    if ('Start' === this.irrigation_button_caption) {
-      this.irrigation_button_caption = 'Stop';
-      this.irrigation_button_color = 'danger';
-    } else {
-      this.irrigation_button_caption = 'Start';
-      this.irrigation_button_color = '';
-    }
+    
   }
 
   toggleChanged() {
-    this.irrigation_button_caption = 'Start';
-    this.irrigation_button_color = '';
+
   }
 }
