@@ -2,17 +2,18 @@ import { Component, ViewChild } from '@angular/core';
 import { Platform, AlertController } from 'ionic-angular';
 import { StatusBar, Splashscreen } from 'ionic-native';
 import { AuthService } from '../providers/auth-service';
+import { RestService } from '../providers/rest-service';
 import { LoginPage } from '../pages/login/login';
 
 @Component({
   templateUrl: 'app.html',
-  providers: [AuthService]
+  providers: [AuthService, RestService]
 })
 export class MyApp {
   rootPage = LoginPage;
   @ViewChild('myNav') nav;
  
-  constructor(platform: Platform, public alertCtrl: AlertController, private authService: AuthService) {
+  constructor(platform: Platform, public alertCtrl: AlertController, private authService: AuthService, private restService: RestService) {
     // Catch back button event for Android
     // Prevent use going back to login page
     platform.registerBackButtonAction(() => {

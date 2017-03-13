@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { AuthService } from '../../providers/auth-service';
+import { RestService } from '../../providers/rest-service';
 import { TabsPage } from '../tabs/tabs';
 /*
   Generated class for the Login page.
@@ -14,14 +15,24 @@ import { TabsPage } from '../tabs/tabs';
 })
 export class LoginPage {
 
-  constructor(public navCtrl: NavController, private authService: AuthService) {
+  constructor(public navCtrl: NavController, private authService: AuthService, private restService: RestService) {
   }
 
   ionViewDidLoad() {
   }
 
   loginSelected() {
-      this.authService.isLogin = true;
-      this.navCtrl.push(TabsPage);
+      this.restService.login().subscribe(
+                data => {
+                    alert(data);
+                    this.navCtrl.push(TabsPage);
+                },
+                err => {
+                    console.log(err);
+                },
+                () => console.log('Movie Search Complete')
+            );
+      // this.authService.isLogin = true;
+      // this.navCtrl.push(TabsPage);
   }
 }
