@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { AlertController, NavController, LoadingController, Loading } from 'ionic-angular';
 import { AuthService } from '../../providers/auth-service';
-import { RestService } from '../../providers/rest-service';
 import { TabsPage } from '../tabs/tabs';
 /*
   Generated class for the Login page.
@@ -14,25 +13,51 @@ import { TabsPage } from '../tabs/tabs';
   templateUrl: 'login.html',
 })
 export class LoginPage {
+  loading: Loading;
+  registerCredentials = {name: '', password: ''};
 
-  constructor(public navCtrl: NavController, private authService: AuthService, private restService: RestService) {
+  constructor(public navCtrl: NavController, private authService: AuthService, 
+              private loadingCtrl: LoadingController, private alertCtrl: AlertController) {
   }
 
   ionViewDidLoad() {
   }
 
   loginSelected() {
-      this.restService.login().subscribe(
-                data => {
-                    alert(data);
-                    this.navCtrl.push(TabsPage);
-                },
-                err => {
-                    console.log(err);
-                },
-                () => console.log('Movie Search Complete')
-            );
-      // this.authService.isLogin = true;
-      // this.navCtrl.push(TabsPage);
+      this.showLoading();
+
+      this.authService.login(this.registerCredentials).subscribe(allowed => {
+        if (allowed) {
+          setTimeout(() => {
+          this.loading.dismiss();
+          this.navCtrl.setRoot(TabsPage)
+          });
+        } else {
+          this.showError("Login failed");
+        }
+      },
+      error => {
+        this.showError(error);
+      });
+  }
+
+  showLoading() {
+    this.loading = this.loadingCtrl.create({
+      content: 'Please wait...'
+    });
+    this.loading.present();
+  }
+
+  showError(text) {
+    setTimeout(() => {
+      this.loading.dismiss();
+    });
+ 
+    let alert = this.alertCtrl.create({
+      title: 'Fail',
+      subTitle: text,
+      buttons: ['OK']
+    });
+    alert.present(prompt);
   }
 }

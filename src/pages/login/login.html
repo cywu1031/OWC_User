@@ -13,16 +13,22 @@
 </ion-header>
 
 
-<ion-content padding>
-    <ion-item>
-        <ion-label floating>Username</ion-label>
-        <ion-input type="text" value=""></ion-input>
-    </ion-item>
+<ion-content class="login-content"  padding>
+  <div class="login-box">
+    <form (ngSubmit)="loginSelected()" #registerForm="ngForm">
+      <ion-item>
+          <ion-label floating>Username</ion-label>
+          <ion-input type="text" value="" name="name" [(ngModel)]="registerCredentials.name" required></ion-input>
+      </ion-item>
 
-    <ion-item>
-        <ion-label floating>Password</ion-label>
-        <ion-input type="password"></ion-input>
-    </ion-item>
-    
-    <button ion-button round full (click)="loginSelected()">Login</button>
+      <ion-item>
+          <ion-label floating>Password</ion-label>
+          <ion-input type="password" name="password" [(ngModel)]="registerCredentials.password" required></ion-input>
+      </ion-item>
+      
+      <ion-col class="signup-col">
+        <button ion-button class="submit-btn" full type="submit" [disabled]="!registerForm.form.valid">Login</button>  
+      </ion-col>
+    </form>
+  </div>
 </ion-content>
