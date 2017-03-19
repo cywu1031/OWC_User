@@ -1,18 +1,19 @@
 import { Component, ViewChild } from '@angular/core';
 import { Platform, AlertController } from 'ionic-angular';
 import { StatusBar, Splashscreen } from 'ionic-native';
-import { AuthService } from '../providers/auth-service';
+import { BackendService } from '../providers/backend-service';
+import { ShareService } from '../providers/shareservice';
 import { LoginPage } from '../pages/login/login';
 
 @Component({
   templateUrl: 'app.html',
-  providers: [AuthService]
+  providers: [BackendService, ShareService]
 })
 export class MyApp {
   rootPage = LoginPage;
   @ViewChild('myNav') nav;
  
-  constructor(platform: Platform, public alertCtrl: AlertController, private authService: AuthService) {
+  constructor(platform: Platform, public alertCtrl: AlertController, private backendService: BackendService, private shareService: ShareService) {
     // Catch back button event for Android
     // Prevent use going back to login page
     platform.registerBackButtonAction(() => {
@@ -45,7 +46,7 @@ export class MyApp {
         {
           text: 'Agree',
           handler: () => {
-            this.authService.logout().subscribe(succ => {
+            this.backendService.logout().subscribe(succ => {
                 this.nav.setRoot(LoginPage)
             });
           }

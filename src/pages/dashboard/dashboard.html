@@ -32,21 +32,9 @@
         </ion-col>
       </ion-row>
       <ion-row>
-        <ion-col>
+        <ion-col *ngFor="let sensor of shareService.sensor_info[shareService.selected_crop_user]">
           <ion-item>
-            <ion-label>Temperature sensor</ion-label>
-            <ion-toggle color="secondary" checked="true"></ion-toggle>
-          </ion-item>
-        </ion-col>
-        <ion-col>
-          <ion-item>
-            <ion-label>Humidity sensor</ion-label>
-            <ion-toggle color="secondary" checked="true"></ion-toggle>
-          </ion-item>
-        </ion-col>
-        <ion-col>
-          <ion-item>
-            <ion-label>Soil moisture sensor</ion-label>
+            <ion-label>{{sensor.name}}</ion-label>
             <ion-toggle color="secondary" checked="true"></ion-toggle>
           </ion-item>
         </ion-col>
@@ -73,7 +61,16 @@
       Sensors
     </ion-list-header>
 
-    <ion-card>
+    <ion-card *ngFor="let sensor of shareService.sensor_info[shareService.selected_crop_user]">
+      <ion-card-header>
+        {{sensor.name}}
+      </ion-card-header>
+      <ion-card-content>
+        <canvas #soilMoistureCanvas></canvas>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- <ion-card>
       <ion-card-header>
         Soil moisture
       </ion-card-header>
@@ -98,7 +95,7 @@
       <ion-card-content>
         <canvas #humidityCanvas></canvas>
       </ion-card-content>
-    </ion-card>
+    </ion-card> -->
   </ion-list>
 
   <ion-list>

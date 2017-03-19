@@ -61,6 +61,6 @@ export class DashboardPage {
   }
 
   toggleChanged() {
-
+    var a = '1'
   }
 }

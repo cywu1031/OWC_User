@@ -15,26 +15,12 @@ import { ShareService } from '../../providers/shareservice';
   templateUrl: 'management.html'
 })
 export class ManagementPage {
-  farms: any[];
 
   constructor(public navCtrl: NavController, public alertCtrl: AlertController, private shareService: ShareService) {
-      this.getFarms();
       this.shareService.title = 'Management';
   }
 
   ionViewDidEnter() {
-  }
-
-  getFarms() {
-      this.farms = [];
-
-      this.farms.push({
-          name: 'Farm1',
-          stage: '2',
-          soil_type: 'clay',
-          field_size: '12',
-          description: 'Test'
-      });
   }
 
   farmSelected(farm) {

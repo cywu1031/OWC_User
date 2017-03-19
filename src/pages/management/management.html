@@ -13,11 +13,11 @@
     <ion-list>
       <ion-list-header>Your farms</ion-list-header>
 
-      <ion-item-sliding *ngFor="let farm of farms">
+      <ion-item-sliding *ngFor="let farm of shareService.crop_user">
         <button ion-item (click)="farmSelected(farm)">
           <h2>{{ farm.name }}</h2>
-          <p>{{ farm.stage }}</p>
-        </button> --> 
+          <p>{{ farm.description }}</p>
+        </button>
         <ion-item-options side="right">
           <button ion-button color="secondary" (click)="updateSelected(farm)">
             <ion-icon name="ios-create"></ion-icon>

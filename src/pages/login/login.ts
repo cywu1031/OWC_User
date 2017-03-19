@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { AlertController, NavController, LoadingController, Loading } from 'ionic-angular';
-import { AuthService } from '../../providers/auth-service';
+import { BackendService } from '../../providers/backend-service';
 import { TabsPage } from '../tabs/tabs';
 /*
   Generated class for the Login page.
@@ -16,7 +16,7 @@ export class LoginPage {
   loading: Loading;
   registerCredentials = {name: '', password: ''};
 
-  constructor(public navCtrl: NavController, private authService: AuthService, 
+  constructor(public navCtrl: NavController, private backendService: BackendService, 
               private loadingCtrl: LoadingController, private alertCtrl: AlertController) {
   }
 
@@ -26,7 +26,7 @@ export class LoginPage {
   loginSelected() {
       this.showLoading();
 
-      this.authService.login(this.registerCredentials).subscribe(allowed => {
+      this.backendService.login(this.registerCredentials).subscribe(allowed => {
         if (allowed) {
           setTimeout(() => {
           this.loading.dismiss();

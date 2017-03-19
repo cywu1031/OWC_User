@@ -6,14 +6,9 @@
   <ion-list radio-group>
     <ion-list-header>Your farms</ion-list-header>
 
-    <ion-item menuToggle>
-      <ion-label>Farm1</ion-label>
-      <ion-radio checked="true" value="Farm1"></ion-radio>
-    </ion-item>
-
-    <ion-item menuToggle>
-      <ion-label>Farm2</ion-label>
-      <ion-radio value="Farm2"></ion-radio>
+    <ion-item menuToggle *ngFor="let farm of shareService.crop_user">
+      <ion-label>{{farm.name}}</ion-label>
+      <ion-radio checked="true" value={{farm.name}}></ion-radio>
     </ion-item>
   </ion-list>
   
