@@ -9,6 +9,7 @@ import { LoginPage } from '../pages/login/login';
   templateUrl: 'app.html',
   providers: [BackendService, ShareService]
 })
+
 export class MyApp {
   rootPage = LoginPage;
   @ViewChild('myNav') nav;
@@ -55,5 +56,8 @@ export class MyApp {
     });
 
     confirm.present();
+  }
+
+  selectedFarm() {
   }
 }

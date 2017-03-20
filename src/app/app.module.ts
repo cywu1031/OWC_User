@@ -9,6 +9,8 @@ import { TabsPage } from '../pages/tabs/tabs';
 import { FarmDetailPage } from '../pages/farm-detail/farm-detail';
 import { FarmEditPage } from '../pages/farm-edit/farm-edit'; 
 import { LoginPage } from '../pages/login/login';
+import { ChartsModule } from 'ng2-charts/charts/charts';
+import '../../node_modules/chart.js/dist/Chart.bundle.min.js'; 
 
 @NgModule({
   declarations: [
@@ -23,7 +25,8 @@ import { LoginPage } from '../pages/login/login';
     LoginPage
   ],
   imports: [
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp),
+    ChartsModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

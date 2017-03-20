@@ -61,12 +61,26 @@
       Sensors
     </ion-list-header>
 
-    <ion-card *ngFor="let sensor of shareService.sensor_info[shareService.selected_crop_user]">
+    <ion-card *ngFor="let sensor of shareService.sensor_info[shareService.selected_crop_user]; let i = index">
       <ion-card-header>
         {{sensor.name}}
       </ion-card-header>
       <ion-card-content>
-        <canvas #soilMoistureCanvas></canvas>
+        <canvas baseChart
+                [datasets]="chartSetting.lineChartData[i]"
+                [labels]="chartSetting.lineChartLabels[i]"
+                [options]="chartSetting.lineChartOptions"
+                [colors]="chartSetting.lineChartColors[i]"
+                [legend]="chartSetting.lineChartLegend"
+                [chartType]="chartSetting.lineChartType"></canvas>
+      </ion-card-content>
+    </ion-card>
+    <!-- <ion-card *ngFor="let sensor of shareService.sensor_info[shareService.selected_crop_user]">
+      <ion-card-header>
+        {{sensor.name}}
+      </ion-card-header>
+      <ion-card-content>
+        <canvas #sensorCanvas></canvas>
       </ion-card-content>
     </ion-card>
 

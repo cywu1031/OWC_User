@@ -1,31 +1,22 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 
-import { NavController, PopoverController } from 'ionic-angular';
+import { NavController } from 'ionic-angular';
 
 import { ShareService } from '../../providers/shareservice';
 
+import { ChartSetting } from '../../providers/chart-setting';
+
+
 @Component({
   selector: 'page-dashboard',
-  templateUrl: 'dashboard.html'
+  templateUrl: 'dashboard.html',
+  providers: [ChartSetting]
 })
+
 export class DashboardPage {
-  sensor_data: any[];
-  sensor_count = 3;  
-  @ViewChild('soilMoistureCanvas') soilMoistureCanvas;
-  @ViewChild('temperatureCanvas') temperatureCanvas;
-  @ViewChild('humidityCanvas') humidityCanvas;
-
-  weather_data: any[];
-  weather_count = 3;
-  @ViewChild('percipitationCanvas') percipitationCanvas;
-  @ViewChild('windSpeedCanvas') windSpeedCanvas;
-  @ViewChild('solarRadiationCanvas') solarRadiationCanvas;
-
-  @ViewChild('waterUsageCanvas') waterUsageCanvas;
-
   manual: any;
 
-  constructor(public navCtrl: NavController, private shareService: ShareService, private popoverCtrl: PopoverController) {
+  constructor(public navCtrl: NavController, private shareService: ShareService, private chartSetting: ChartSetting) {
     this.manual = false;
     this.initSensorData();
     this.initWeatherData();
@@ -33,34 +24,30 @@ export class DashboardPage {
   }
 
   initSensorData() {
-    this.sensor_data = [];
+    this.chartSetting.lineChartData = [[{data: [65, 59, 80, 81, 56, 55, 40], label: 'Series A'}],
+        [{data: [28, 48, 40, 19, 86, 27, 90], label: 'Series B'}],
+        [{data: [18, 48, 77, 9, 100, 27, 40], label: 'Series C'}]]
 
-    // Soil moisture, Temperature, Humidity
-    for (var i = 0; i < this.sensor_count; ++i) {
-        this.sensor_data.push({
-            latest: "",
-            last10: []
-        });
-    }
+    this.chartSetting.lineChartLabels = [['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                                       ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                                       ['January', 'February', 'March', 'April', 'May', 'June', 'July']];
   }
 
   initWeatherData() {
-    this.weather_data = [];
+    // this.weather_data = [];
 
-     // Percipitation, Wind speed, Solar radiation
-    for (var i = 0; i < this.weather_count; ++i) {
-        this.weather_data.push({
-            latest: "",
-            last10: []
-        });
-    }
+    //  // Percipitation, Wind speed, Solar radiation
+    // for (var i = 0; i < this.weather_count; ++i) {
+    //     this.weather_data.push({
+    //         latest: "",
+    //         last10: []
+    //     });
+    // }
   }
 
   irrigateSelected() {
-    
   }
 
   toggleChanged() {
-    var a = '1'
   }
 }

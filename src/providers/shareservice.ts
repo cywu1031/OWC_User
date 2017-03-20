@@ -1,4 +1,6 @@
-
+export class charSetting {
+    
+}
 
 export class ShareService {  
     title: string
@@ -18,6 +20,6 @@ export class ShareService {
         this.sensor_info = []
 
         this.crop_user = []
-        this.selected_crop_user = 0
+        this.selected_crop_user = "0"
     }
 }

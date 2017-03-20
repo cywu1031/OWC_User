@@ -3,12 +3,12 @@
     <ion-title>Menu</ion-title>
   </ion-toolbar>
   
-  <ion-list radio-group>
+  <ion-list menuToggle radio-group [(ngModel)]="shareService.selected_crop_user">
     <ion-list-header>Your farms</ion-list-header>
 
-    <ion-item menuToggle *ngFor="let farm of shareService.crop_user">
+    <ion-item *ngFor="let farm of shareService.crop_user, let i = index">
       <ion-label>{{farm.name}}</ion-label>
-      <ion-radio checked="true" value={{farm.name}}></ion-radio>
+      <ion-radio value={{i}} (click)="selectedFarm()"></ion-radio>
     </ion-item>
   </ion-list>
   

@@ -38,6 +38,11 @@ export class TabsPage {
     this.backendService.getCropUser(this.shareService.user_info._id).subscribe(allowed => {
         if (allowed) {
           setTimeout(() => {
+          this.shareService.sensor_info = new Array(this.shareService.crop_user.length)
+          for (var i = 0;i < this.shareService.sensor_info.length; ++i) {
+            this.shareService.sensor_info[i] = new Array()
+          }
+
           this.loadSensorInfo()
           });
         } else {

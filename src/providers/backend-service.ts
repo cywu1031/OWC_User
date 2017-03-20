@@ -70,11 +70,8 @@ export class BackendService {
         this.http.get(url)
           .subscribe(data => {
             if (200 === data.status) {
-              this.shareService.sensor_info = new Array(data.json().length)
-
               for (var i = 0;i < data.json().length; ++i) {
                  this.shareService.crop_user.push(data.json()[i])
-                 this.shareService.sensor_info[i] = new Array()
               }
             }
 

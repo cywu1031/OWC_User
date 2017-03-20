@@ -20,7 +20,7 @@
       <ion-datetime displayFormat="MM DD YYYY, HH:mm:ss"></ion-datetime>
     </ion-item>
 
-    <ion-card>
+    <!-- <ion-card>
       <ion-card-header>
         Bar Chart
       </ion-card-header>
@@ -37,8 +37,8 @@
         <canvas #doughnutCanvas></canvas>
       </ion-card-content>
     </ion-card>
- 
-    <ion-card>
+  -->
+    <ion-card *ngFor="let v of views">
       <ion-card-header>
         Line Chart
       </ion-card-header>
