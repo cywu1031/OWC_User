@@ -61,55 +61,22 @@
       Sensors
     </ion-list-header>
 
-    <ion-card *ngFor="let sensor of shareService.sensor_info[shareService.selected_crop_user]; let i = index">
-      <ion-card-header>
-        {{sensor.name}}
-      </ion-card-header>
-      <ion-card-content>
-        <canvas baseChart
-                [datasets]="chartSetting.lineChartData[i]"
-                [labels]="chartSetting.lineChartLabels[i]"
-                [options]="chartSetting.lineChartOptions"
-                [colors]="chartSetting.lineChartColors[i]"
-                [legend]="chartSetting.lineChartLegend"
-                [chartType]="chartSetting.lineChartType"></canvas>
-      </ion-card-content>
-    </ion-card>
-    <!-- <ion-card *ngFor="let sensor of shareService.sensor_info[shareService.selected_crop_user]">
-      <ion-card-header>
-        {{sensor.name}}
-      </ion-card-header>
-      <ion-card-content>
-        <canvas #sensorCanvas></canvas>
-      </ion-card-content>
-    </ion-card>
-
-    <!-- <ion-card>
-      <ion-card-header>
-        Soil moisture
-      </ion-card-header>
-      <ion-card-content>
-        <canvas #soilMoistureCanvas></canvas>
-      </ion-card-content>
-    </ion-card>
-
-    <ion-card>
-      <ion-card-header>
-        Temperature
-      </ion-card-header>
-      <ion-card-content>
-        <canvas #temperatureCanvas></canvas>
-      </ion-card-content>
-    </ion-card>
-
-    <ion-card>
-      <ion-card-header>
-        Humidity
-      </ion-card-header>
-      <ion-card-content>
-        <canvas #humidityCanvas></canvas>
-      </ion-card-content>
-    </ion-card> -->
+    <ion-col *ngIf="shareService.isDataAvailable">
+      <ion-card *ngFor="let sensor of shareService.sensor_info[shareService.selected_crop_user]; let i = index">
+        <ion-card-header>
+          {{sensor.name}}
+        </ion-card-header>
+        <ion-card-content>
+          <canvas baseChart
+                  [datasets]="shareService.real_time_sensor_data[i]"
+                  [labels]="shareService.real_time_sensor_data_label[i]"
+                  [options]="chartSetting.lineChartOptions"
+                  [colors]="chartSetting.lineChartColors[i]"
+                  [legend]="chartSetting.lineChartLegend"
+                  [chartType]="chartSetting.lineChartType"></canvas>
+        </ion-card-content>
+      </ion-card>
+    </ion-col>
   </ion-list>
 
   <ion-list>

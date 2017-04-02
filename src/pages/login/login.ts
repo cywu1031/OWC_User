@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { AlertController, NavController, LoadingController, Loading } from 'ionic-angular';
 import { BackendService } from '../../providers/backend-service';
 import { TabsPage } from '../tabs/tabs';
+
 /*
   Generated class for the Login page.
 

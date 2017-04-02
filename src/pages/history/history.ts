@@ -1,127 +1,108 @@
 import { Component, ViewChild } from '@angular/core';
 
-import { NavController } from 'ionic-angular';
-
-import { Chart } from 'chart.js';
+import { NavController, LoadingController, Loading, AlertController } from 'ionic-angular';
 
 import { ShareService } from '../../providers/shareservice';
 
+import { BackendService } from '../../providers/backend-service';
+
+import { ChartSetting } from '../../providers/chart-setting';
+
+
 @Component({
   selector: 'page-history',
-  templateUrl: 'history.html'
+  templateUrl: 'history.html',
+  providers: [ChartSetting]
 })
 export class HistoryPage {
-  @ViewChild('barCanvas') barCanvas;
-  @ViewChild('doughnutCanvas') doughnutCanvas;
-  @ViewChild('lineCanvas') lineCanvas;
-
-  barChart: any;
-  doughnutChart: any;
-  lineChart: any;
-  
-  constructor(public navCtrl: NavController, private shareService: ShareService) {
+ 
+  start_date_time: any
+  end_date_time: any
+  isSearchDataAvailable: any
+  loading: Loading;
+  sensor_data: any
+  labels: any
+  constructor(public navCtrl: NavController, private loadingCtrl: LoadingController, 
+      private alertCtrl: AlertController, private shareService: ShareService, 
+      private backendService: BackendService, private chartSetting: ChartSetting) {
       this.shareService.title = 'History';
+      this.isSearchDataAvailable = false
+      this.chartSetting.lineChartLabels = [['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                                       ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                                       ['January', 'February', 'March', 'April', 'May', 'June', 'July']];
   }
 
   ionViewDidLoad() {
-    this.barChart = new Chart(this.barCanvas.nativeElement, {
-        type: 'bar',
-        data: {
-            labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-            datasets: [{
-                label: '# of Votes',
-                data: [12, 19, 3, 5, 2, 3],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255,99,132,1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero:true
-                    }
-                }]
-            }
-        }
+  }
 
-    });
+  submitSelected() {
+      this.showLoading()
+      this.isSearchDataAvailable = false
+      this.loadSensorHistory()
+  }
 
-    this.doughnutChart = new Chart(this.doughnutCanvas.nativeElement, {
- 
-        type: 'doughnut',
-        data: {
-            labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-            datasets: [{
-                label: '# of Votes',
-                data: [12, 19, 3, 5, 2, 3],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                ],
-                hoverBackgroundColor: [
-                    "#FF6384",
-                    "#36A2EB",
-                    "#FFCE56",
-                    "#FF6384",
-                    "#36A2EB",
-                    "#FFCE56"
-                ]
-            }]
-        }
-    });
- 
-    this.lineChart = new Chart(this.lineCanvas.nativeElement, {
-
-        type: 'line',
-        data: {
-            labels: ["January", "February", "March", "April", "May", "June", "July"],
-            datasets: [
-                {
-                    label: "My First dataset",
-                    fill: false,
-                    lineTension: 0.1,
-                    backgroundColor: "rgba(75,192,192,0.4)",
-                    borderColor: "rgba(75,192,192,1)",
-                    borderCapStyle: 'butt',
-                    borderDash: [],
-                    borderDashOffset: 0.0,
-                    borderJoinStyle: 'miter',
-                    pointBorderColor: "rgba(75,192,192,1)",
-                    pointBackgroundColor: "#fff",
-                    pointBorderWidth: 1,
-                    pointHoverRadius: 5,
-                    pointHoverBackgroundColor: "rgba(75,192,192,1)",
-                    pointHoverBorderColor: "rgba(220,220,220,1)",
-                    pointHoverBorderWidth: 2,
-                    pointRadius: 1,
-                    pointHitRadius: 10,
-                    data: [65, 59, 80, 81, 56, 55, 40],
-                    spanGaps: false,
-                }
-            ]
-        }
-
-    });
-
+  loadSensorHistory() {
+    if (0 === this.shareService.sensor_info.length) {
+      this.showError("No sensor")
+      return
     }
+
+    this.sensor_data = new Array()
+    this.labels = new Array()
+    this.callSensorInfoService(0)
+  }
+
+  callSensorInfoService(sensor_idx) {
+    var crop_user_idx = parseInt(this.shareService.selected_crop_user)
+    if (sensor_idx + 1 > this.shareService.sensor_info[crop_user_idx].length) {
+      this.loading.dismiss()
+      this.isSearchDataAvailable = true
+      return
+    }
+    
+    var sensor_id = this.shareService.sensor_info[crop_user_idx][sensor_idx]._id
+    var crop_user_id = this.shareService.crop_user[crop_user_idx]._id
+    this.backendService.getSensorHistory(sensor_id, crop_user_id, this.start_date_time, this.end_date_time).subscribe(allowed => {
+        if (allowed) {
+          setTimeout(() => {
+          this.sensor_data.push([])
+          this.labels.push([])
+          var idx = this.sensor_data.length - 1
+          this.sensor_data[idx].push({data:[], label:""})
+
+          for (var i = 0;i < this.shareService.history_search_temp.length; ++i) {
+              this.sensor_data[idx][0].data.push(this.shareService.history_search_temp[i].value)
+              this.labels[idx].push(this.shareService.history_search_temp[i].creation_date)
+          }
+
+          this.callSensorInfoService(sensor_idx + 1);
+        });
+        } else {
+          this.showError("Get sensor info failed");
+        }
+      },
+      error => {
+        this.showError(error);
+      });
+  }
+
+  showLoading() {
+    this.loading = this.loadingCtrl.create({
+      content: 'Retrieving your info. Please wait...'
+    });
+    this.loading.present();
+  }
+
+  showError(text) {
+    setTimeout(() => {
+      this.loading.dismiss();
+    });
+ 
+    let alert = this.alertCtrl.create({
+      title: 'Fail',
+      subTitle: text,
+      buttons: ['OK']
+    });
+    alert.present(prompt);
+  }
 }

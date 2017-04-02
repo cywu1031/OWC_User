@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { Tab, LoadingController, Loading, AlertController } from 'ionic-angular';
 
 import { DashboardPage } from '../dashboard/dashboard';
@@ -7,6 +7,9 @@ import { AnalysisPage } from '../analysis/analysis';
 import { ManagementPage } from '../management/management';
 import { ShareService } from '../../providers/shareservice';
 import { BackendService } from '../../providers/backend-service';
+import { Observable } from 'rxjs/Rx';
+import { Http } from '@angular/http';
+
 
 @Component({
   templateUrl: 'tabs.html',
@@ -22,7 +25,8 @@ export class TabsPage {
   loading: Loading;
 
   constructor(private shareService: ShareService, private backendService: BackendService,
-              private loadingCtrl: LoadingController, private alertCtrl: AlertController) {
+              private loadingCtrl: LoadingController, private alertCtrl: AlertController, 
+              public http: Http, private zone: NgZone) {
     this.loadCropUserInfo()
   }
 
@@ -42,6 +46,7 @@ export class TabsPage {
           for (var i = 0;i < this.shareService.sensor_info.length; ++i) {
             this.shareService.sensor_info[i] = new Array()
           }
+          this.shareService.updateCropUser()
 
           this.loadSensorInfo()
           });
@@ -64,8 +69,10 @@ export class TabsPage {
   }
 
   callSensorInfoService(crop_user_idx, sensor_idx) {
+    // Got all sensor info 
     if (crop_user_idx + 1 > this.shareService.crop_user.length) {
-      this.loading.dismiss()
+      // this.loading.dismiss()
+      this.loadSensorData()
       return
     }
 
@@ -78,9 +85,25 @@ export class TabsPage {
         if (allowed) {
           setTimeout(() => {
           this.callSensorInfoService(crop_user_idx, sensor_idx + 1);
-          });
+        });
         } else {
           this.showError("Get sensor info failed");
+        }
+      },
+      error => {
+        this.showError(error);
+      });
+  }
+
+  loadSensorData() {
+    this.backendService.getSensorData(this.backendService.getSensorDataUrl()).subscribe(allowed => {
+        if (allowed) {
+          setTimeout(() => {
+          this.shareService.isDataAvailable = true
+          this.loading.dismiss()
+          });
+        } else {
+          this.showError("Get crop user failed");
         }
       },
       error => {

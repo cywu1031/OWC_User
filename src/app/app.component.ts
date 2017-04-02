@@ -1,9 +1,11 @@
-import { Component, ViewChild } from '@angular/core';
-import { Platform, AlertController } from 'ionic-angular';
+import { Component, ViewChild, NgZone } from '@angular/core';
+import { Platform, AlertController, LoadingController, Loading } from 'ionic-angular';
 import { StatusBar, Splashscreen } from 'ionic-native';
 import { BackendService } from '../providers/backend-service';
 import { ShareService } from '../providers/shareservice';
 import { LoginPage } from '../pages/login/login';
+import { Observable } from 'rxjs/Rx';
+import { Http } from '@angular/http';
 
 @Component({
   templateUrl: 'app.html',
@@ -13,8 +15,11 @@ import { LoginPage } from '../pages/login/login';
 export class MyApp {
   rootPage = LoginPage;
   @ViewChild('myNav') nav;
+  loading: Loading;
  
-  constructor(platform: Platform, public alertCtrl: AlertController, private backendService: BackendService, private shareService: ShareService) {
+  constructor(platform: Platform, public alertCtrl: AlertController, private backendService: BackendService, 
+              private shareService: ShareService, public http: Http, private zone: NgZone, 
+              private loadingCtrl: LoadingController) {
     // Catch back button event for Android
     // Prevent use going back to login page
     platform.registerBackButtonAction(() => {
@@ -59,5 +64,44 @@ export class MyApp {
   }
 
   selectedFarm() {
+    this.shareService.updateCropUser()
+
+    this.shareService.isDataAvailable = false
+
+    this.showLoading()
+
+    this.backendService.getSensorData(this.backendService.getSensorDataUrl()).subscribe(allowed => {
+        if (allowed) {
+          setTimeout(() => {
+          this.shareService.isDataAvailable = true
+          this.loading.dismiss()
+          });
+        } else {
+          this.showError("Get sensor history failed");
+        }
+      },
+      error => {
+        this.showError(error);
+      });
+  }
+
+  showLoading() {
+    this.loading = this.loadingCtrl.create({
+      content: 'Retrieving your info. Please wait...'
+    });
+    this.loading.present();
+  }
+
+  showError(text) {
+    setTimeout(() => {
+      this.loading.dismiss();
+    });
+ 
+    let alert = this.alertCtrl.create({
+      title: 'Fail',
+      subTitle: text,
+      buttons: ['OK']
+    });
+    alert.present(prompt);
   }
 }
