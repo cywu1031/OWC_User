@@ -46,10 +46,6 @@ export class BackendService {
       });
     }
   }
-
-  // public getUserInfo() : User {
-  //   return this.currentUser;
-  // }
  
   public logout() {
     return Observable.create(observer => {
