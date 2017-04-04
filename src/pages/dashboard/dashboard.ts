@@ -7,7 +7,7 @@ import { ShareService } from '../../providers/shareservice';
 import { ChartSetting } from '../../providers/chart-setting';
 
 import { BackendService } from '../../providers/backend-service';
-import { Observable } from 'rxjs/Rx';
+// import { Observable } from 'rxjs/Rx';
 import { Http } from '@angular/http';
 @Component({
   selector: 'page-dashboard',

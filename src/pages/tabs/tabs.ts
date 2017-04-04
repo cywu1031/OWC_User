@@ -7,7 +7,7 @@ import { AnalysisPage } from '../analysis/analysis';
 import { ManagementPage } from '../management/management';
 import { ShareService } from '../../providers/shareservice';
 import { BackendService } from '../../providers/backend-service';
-import { Observable } from 'rxjs/Rx';
+// import { Observable } from 'rxjs/Rx';
 import { Http } from '@angular/http';
 
 

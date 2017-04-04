@@ -4,7 +4,7 @@ import { StatusBar, Splashscreen } from 'ionic-native';
 import { BackendService } from '../providers/backend-service';
 import { ShareService } from '../providers/shareservice';
 import { LoginPage } from '../pages/login/login';
-import { Observable } from 'rxjs/Rx';
+// import { Observable } from 'rxjs/Rx';
 import { Http } from '@angular/http';
 
 @Component({
