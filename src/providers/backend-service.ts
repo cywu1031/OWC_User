@@ -18,8 +18,8 @@ export class BackendService {
   baseUrl: any;
   constructor(public http: Http, private shareService: ShareService) {
     this.isLogin = false;
-    this.baseUrl = 'https://sjsusmartfarm-backend.herokuapp.com/';
-    // this.baseUrl = 'http://localhost:3000/';
+    // this.baseUrl = 'https://sjsusmartfarm-backend.herokuapp.com/';
+    this.baseUrl = 'http://localhost:3000/';
   }
  
   public login(credentials) {
@@ -144,7 +144,7 @@ export class BackendService {
                   this.shareService.real_time_sensor_data_label[i][0] = new Array(sensor_data.length) 
                   for (var j = sensor_data.length - 1;j >= 0; --j) {
                     this.shareService.real_time_sensor_data[i][0].data[k] = parseFloat(sensor_data[j].value)
-                    this.shareService.real_time_sensor_data_label[i][k++] = sensor_data[j].creation_date
+                    this.shareService.real_time_sensor_data_label[i][k++] = ""//sensor_data[j].creation_date
                   }
                 }
               }
@@ -171,6 +171,22 @@ export class BackendService {
           }
 
           observer.next(200 === data.status);
+          observer.complete();
+         }, error => {
+           observer.next(false);
+           observer.complete();
+         });
+    });
+  }
+
+  public updateCropUser(crop_user_id, update_data) {
+    return Observable.create(observer => {
+      var url = this.baseUrl + 'crop-user/' + crop_user_id;
+      let headers = new Headers({ 'Content-Type': 'application/json' });
+
+      this.http.put(url, update_data, {headers:headers})
+        .subscribe(data => {
+          observer.next(data.json());
           observer.complete();
          }, error => {
            observer.next(false);

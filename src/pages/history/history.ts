@@ -72,7 +72,7 @@ export class HistoryPage {
 
           for (var i = 0;i < this.shareService.history_search_temp.length; ++i) {
               this.sensor_data[idx][0].data.push(this.shareService.history_search_temp[i].value)
-              this.labels[idx].push(this.shareService.history_search_temp[i].creation_date)
+              this.labels[idx].push("")//(this.shareService.history_search_temp[i].creation_date)
           }
 
           this.callSensorInfoService(sensor_idx + 1);

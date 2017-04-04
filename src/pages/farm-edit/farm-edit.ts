@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
-import { AlertController } from 'ionic-angular';
+import { AlertController, LoadingController, Loading } from 'ionic-angular';
+import { BackendService } from '../../providers/backend-service';
+import { ShareService } from '../../providers/shareservice';
+
 /*
   Generated class for the FarmEdit page.
 
@@ -16,17 +19,20 @@ export class FarmEditPage {
   origin_farm: any;
   func: any;
   color: any;
+  loading: Loading;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, 
-              public alertCtrl: AlertController) {
+              public alertCtrl: AlertController, private loadingCtrl: LoadingController,
+              private backendService: BackendService, private shareService: ShareService) {
       this.func = navParams.get('func');
 
       if ('Create' === this.func) {
           this.farm = {
               name: '',
               stage: '',
-              soil_type: '',
+              field_capacity: '',
               field_size: '',
+              mad: '',
               description: ''
           };
 
@@ -45,8 +51,9 @@ export class FarmEditPage {
   confirm() {
     let msg = 'Name: ' + this.farm.name + 
               '<br>Stage: ' + this.farm.stage + 
-              '<br>Soil type: ' + this.farm.soil_type + 
+              '<br>Field capacity: ' + this.farm.field_capacity + 
               '<br>Field size: ' + this.farm.field_size + 
+              '<br>MAD: ' + this.farm.mad + 
               '<br>Description: ' + this.farm.description;
 
     let confirm = this.alertCtrl.create({
@@ -62,13 +69,58 @@ export class FarmEditPage {
         {
           text: 'Agree',
           handler: () => {
-            console.log('Agree clicked');
-            this.navCtrl.pop();
+            this.showLoading();
+
+            if ('Create' === this.func) {
+                
+            } else {
+                this.backendService.updateCropUser(this.farm._id, this.farm).subscribe(allowed => {
+                  if (allowed) {
+                    setTimeout(() => {
+                    for (var i = 0;i < this.shareService.crop_user.length; ++i) {
+                      if (this.shareService.crop_user[i]._id === allowed._id) {
+                        this.shareService.crop_user[i] = allowed
+                        break
+                      }
+                    }
+
+                    this.loading.dismiss();
+                    this.navCtrl.pop();
+                    });
+                  } else {
+                    this.loading.dismiss();
+                    this.showError("Update failed");
+                  }
+                },
+                error => {
+                  this.showError(error);
+                });
+            }
           }
         }
       ]
     });
 
     confirm.present();
+  }
+
+  showLoading() {
+    this.loading = this.loadingCtrl.create({
+      content: 'Please wait...'
+    });
+    this.loading.present();
+  }
+
+  showError(text) {
+    setTimeout(() => {
+      this.loading.dismiss();
+    });
+ 
+    let alert = this.alertCtrl.create({
+      title: 'Fail',
+      subTitle: text,
+      buttons: ['OK']
+    });
+    alert.present(prompt);
   }
 }
