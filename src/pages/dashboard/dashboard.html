@@ -48,15 +48,39 @@
       Water usage
     </ion-list-header>
 
-    <ion-card>
-      <ion-card-header>
-        Pie Chart
-      </ion-card-header>
-      <ion-card-content>
-        <canvas #waterUsageCanvas></canvas>
-      </ion-card-content>
-    </ion-card>
+    <ion-col *ngIf="shareService.isDataAvailable">
+      <ion-card>
+        <ion-card-header>
+          Water consumptions
+        </ion-card-header>
+        <ion-card-content>
+          <canvas baseChart
+                    [datasets]="shareService.real_time_water_consumption_data[0]"
+                    [labels]="shareService.real_time_water_consumption_label[0]"
+                    [options]="chartSetting.lineChartOptions"
+                    [colors]="chartSetting.lineChartColors[0]"
+                    [legend]="chartSetting.lineChartLegend"
+                    [chartType]="chartSetting.lineChartType"></canvas>
+        </ion-card-content>
+      </ion-card>
 
+      <ion-card>
+        <ion-card-header>
+          Daily water usage
+        </ion-card-header>
+        <ion-card-content>
+          <canvas baseChart
+                    [data]="shareService.real_time_daily_water_usage_data"
+                    [labels]="shareService.real_time_daily_water_usage_label"
+                    [chartType]="chartSetting.pieChartType"></canvas>
+        </ion-card-content>
+      </ion-card>
+
+    </ion-col>
+
+  </ion-list>
+
+  <ion-list>
     <ion-list-header>
       Sensors
     </ion-list-header>
@@ -77,6 +101,7 @@
         </ion-card-content>
       </ion-card>
     </ion-col>
+
   </ion-list>
 
   <ion-list>

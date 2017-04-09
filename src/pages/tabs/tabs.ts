@@ -10,7 +10,6 @@ import { BackendService } from '../../providers/backend-service';
 // import { Observable } from 'rxjs/Rx';
 import { Http } from '@angular/http';
 
-
 @Component({
   templateUrl: 'tabs.html',
 })
@@ -30,25 +29,28 @@ export class TabsPage {
     this.loadCropUserInfo()
   }
 
-  ionViewDidLoad() {
-  }
-
   tabChange(tab: Tab){
+
   }
 
   loadCropUserInfo() {
     this.showLoading();
 
-    this.backendService.getCropUser(this.shareService.user_info._id).subscribe(allowed => {
-        if (allowed) {
+    this.backendService.getCropUser(this.shareService.user_info._id).subscribe(data => {
+        if (data && 200 === data.status) {
           setTimeout(() => {
-          this.shareService.sensor_info = new Array(this.shareService.crop_user.length)
-          for (var i = 0;i < this.shareService.sensor_info.length; ++i) {
-            this.shareService.sensor_info[i] = new Array()
-          }
-          this.shareService.updateCropUser()
+            for (var i = data.json().length - 1;i >= 0; --i) {
+              this.shareService.crop_user.push(data.json()[i])
+            }
 
-          this.loadSensorInfo()
+            this.shareService.sensor_info = new Array(this.shareService.crop_user.length)
+            
+            for (var i = 0;i < this.shareService.sensor_info.length; ++i) {
+              this.shareService.sensor_info[i] = new Array()
+            }
+
+            this.shareService.updateCropUser()
+            this.loadSensorInfo()
           });
         } else {
           this.showError("Get crop user failed");
@@ -70,24 +72,96 @@ export class TabsPage {
 
   callSensorInfoService(crop_user_idx, sensor_idx) {
     // Got all sensor info 
-    if (crop_user_idx + 1 > this.shareService.crop_user.length) {
-      // this.loading.dismiss()
-      this.loadSensorData()
+    if (crop_user_idx >= this.shareService.crop_user.length) {
+      var selected_crop_user_idx = parseInt(this.shareService.selected_crop_user)
+
+      var end = this.shareService.getBayTime()
+      var start = this.shareService.getBayTime()
+      start.subtract(this.shareService.real_time_data_range, 'm')
+
+      this.loadSensorData(selected_crop_user_idx, 0, start.toISOString(), end.toISOString())
       return
     }
 
+    // request next crop user
     if (sensor_idx + 1 > this.shareService.crop_user[crop_user_idx].sensors.length) {
       this.callSensorInfoService(crop_user_idx + 1, 0)
       return
     }
 
-    this.backendService.getSensorInfo(this.shareService.crop_user[crop_user_idx].sensors[sensor_idx], crop_user_idx).subscribe(allowed => {
-        if (allowed) {
-          setTimeout(() => {
+    this.backendService.getSensorInfo(
+      this.shareService.crop_user[crop_user_idx].sensors[sensor_idx], crop_user_idx).subscribe(data => {
+      if (data && 200 === data.status) {
+        setTimeout(() => {
+          this.shareService.sensor_info[crop_user_idx].push(data.json())
           this.callSensorInfoService(crop_user_idx, sensor_idx + 1);
+      });
+      } else {
+        this.showError("Get sensor info failed");
+      }
+    },
+    error => {
+      this.showError(error);
+    });
+  }
+
+  loadSensorData(crop_user_idx, sensor_idx, start, end) {
+    if (sensor_idx >= this.shareService.sensor_info[crop_user_idx].length) {
+      // this.shareService.isDataAvailable = true
+      // this.loading.dismiss()
+      this.callWaterHistory()
+      return
+    }
+
+    var sensor_id = this.shareService.sensor_info[crop_user_idx][sensor_idx]._id
+    var crop_user_id = this.shareService.crop_user[crop_user_idx]._id
+    this.backendService.getSensorHistory(sensor_id, crop_user_id, start, end).subscribe(data => {
+      if (data && 200 === data.status) {
+        setTimeout(() => {
+          var sensor_history = data.json()
+
+          this.shareService.real_time_sensor_data[sensor_idx][0].data = new Array(sensor_history.length) 
+          this.shareService.real_time_sensor_data_label[sensor_idx][0] = new Array(sensor_history.length)
+
+          for (var i = 0;i < sensor_history.length; ++i) {
+            this.shareService.real_time_sensor_data[sensor_idx][0].data[i] = parseFloat(sensor_history[i].value)
+            this.shareService.real_time_sensor_data_label[sensor_idx][i] = sensor_history[i].creation_date
+          }
+
+          this.loadSensorData(crop_user_idx, sensor_idx + 1, start, end)
         });
+      } else {
+        this.showError("Get sensor data failed");
+      }
+    },
+    error => {
+      this.showError(error);
+    });
+  }
+
+  callWaterHistory() {
+    var end = this.shareService.getBayTime()
+    var start = this.shareService.getBayTime()
+    start.subtract(this.shareService.real_time_data_range, 'm')
+    var crop_user_id = this.shareService.getCropUserId()
+
+    this.backendService.getWaterHistory(crop_user_id, start, end).subscribe(data => {
+        if (data && 200 === data.status) {
+          setTimeout(() => {
+            var water_history = data.json()
+
+            this.shareService.real_time_water_consumption_data[0][0].data = new Array(water_history.length) 
+            this.shareService.real_time_water_consumption_label[0][0] = new Array(water_history.length)
+
+            for (var i = 0;i < water_history.length; ++i) {
+              this.shareService.real_time_water_consumption_data[0][0].data[i] = parseFloat(water_history[i].value)
+              this.shareService.real_time_water_consumption_label[0][i] = water_history[i].creation_date
+            }
+
+            this.callDailyUsedWater()
+          });
         } else {
-          this.showError("Get sensor info failed");
+          this.showError("Get water history failed");
         }
       },
       error => {
@@ -95,15 +169,47 @@ export class TabsPage {
       });
   }
 
-  loadSensorData() {
-    this.backendService.getSensorData(this.backendService.getSensorDataUrl()).subscribe(allowed => {
-        if (allowed) {
+  callDailyUsedWater() {
+    var crop_user_id = this.shareService.getCropUserId()
+    var start = this.shareService.getBayTime()
+    start.hour(0)
+    start.minute(0)
+    start.second(0)
+    var end = this.shareService.getBayTime()
+ 
+    this.backendService.getDailyUsedWater(crop_user_id, start, end).subscribe(data => {
+        if (data && 200 === data.status) {
           setTimeout(() => {
-          this.shareService.isDataAvailable = true
-          this.loading.dismiss()
+            var used = data.json()
+
+            this.shareService.real_time_daily_water_usage_data[0] = parseInt(used.total)
+            
+            this.callDailyWaterLimit()
           });
         } else {
-          this.showError("Get crop user failed");
+          this.showError("Get water history failed");
+        }
+      },
+      error => {
+        this.showError(error);
+      });
+  }
+
+  callDailyWaterLimit() {
+    var crop_user_id = this.shareService.getCropUserId()
+    var date = this.shareService.getBayTime()
+
+    this.backendService.getDailyWaterLimit(crop_user_id, date).subscribe(data => {
+        if (data && 200 === data.status) {
+          setTimeout(() => {
+            var limit = data.json()
+
+            this.shareService.real_time_daily_water_usage_data[1] = parseInt(limit.prediction) - this.shareService.real_time_daily_water_usage_data[0]
+            this.shareService.isDataAvailable = true
+            this.loading.dismiss()
+          });
+        } else {
+          this.showError("Get water history failed");
         }
       },
       error => {

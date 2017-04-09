@@ -9,7 +9,7 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="grid-basic-page">
     <ion-item>
         <ion-icon name="ios-warning" item-left></ion-icon>
         Water usage prediction
@@ -33,5 +33,53 @@
       Managed Allowable Deficit (MAD)
       <ion-badge item-right>{{shareService.crop_user[shareService.selected_crop_user].mad}}</ion-badge>
     </ion-item>
+
+    <ion-list>
+      <ion-row align-items-center>
+        
+        <ion-col>
+          <div>
+            <ion-list-header>
+              Water usage optimized
+            </ion-list-header>
+          </div>
+        </ion-col>
+
+        <ion-col>
+          <div>
+            <ion-list>
+              <ion-item>
+                <ion-label>Range</ion-label>
+                <ion-select [(ngModel)]="range" (ionChange)="onRangeSelected()">
+                  <ion-option value="ThreeDay">Three days</ion-option>
+                  <ion-option value="OneWeek">One week</ion-option>
+                  <ion-option value="OneMonth">One month</ion-option>
+                </ion-select>
+              </ion-item>
+            </ion-list>
+          </div>
+        </ion-col>
+
+        <ion-col>
+        </ion-col>
+
+        <ion-col>
+        </ion-col>
+
+      </ion-row> 
+
+      <ion-col *ngIf="data_ready">
+        <ion-card>
+          <ion-card-content>
+            <canvas baseChart
+                      [datasets]=""
+                      [labels]=""
+                      [options]="chartSetting.barChartOptions"
+                      [legend]="chartSetting.barChartLegend"
+                      [chartType]="chartSetting.barChartType"></canvas>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+  </ion-list>
 
 </ion-content>

@@ -1,3 +1,5 @@
+import * as moment from 'moment-timezone';
+
 export class ShareService {  
     title: string
  
@@ -10,12 +12,19 @@ export class ShareService {
 
     sensor_info: any
 
+    real_time_data_range: any
+
     real_time_sensor_data: any
     real_time_sensor_data_label: any
 
+    real_time_water_consumption_data: any
+    real_time_water_consumption_label: any
+
+    real_time_daily_water_usage_data: any
+    real_time_daily_water_usage_label:any
+
     isDataAvailable: any
 
-    history_search_temp: any
     constructor() {
         this.title = 'Dashboard'
 
@@ -30,9 +39,18 @@ export class ShareService {
         this.real_time_sensor_data_label = []
         this.real_time_sensor_data_label.push([])
 
-        this.isDataAvailable = false
+        this.real_time_water_consumption_data = []
+        this.real_time_water_consumption_data.push([{data:[], label:""}])
 
-        this.history_search_temp = []
+        this.real_time_water_consumption_label = []
+        this.real_time_water_consumption_label.push([])
+
+        this.real_time_daily_water_usage_data = [0, 0]
+        this.real_time_daily_water_usage_label = ['Used', 'Available']
+
+        this.real_time_data_range = 60 // minutes
+
+        this.isDataAvailable = false
     }
 
     public updateCropUser() {
@@ -49,5 +67,16 @@ export class ShareService {
           this.real_time_sensor_data_label[i] = new Array()
           this.real_time_sensor_data_label[i].push([])
         }
+    }
+
+    public getCropUserId() {
+        var selected_crop_user_idx = parseInt(this.selected_crop_user)
+
+        return this.crop_user[selected_crop_user_idx]._id
+    }
+
+    public getBayTime() {
+        var now = moment().utc()
+        return now.subtract(7, 'h')
     }
 }

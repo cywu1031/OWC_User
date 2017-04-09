@@ -54,7 +54,7 @@ export class HistoryPage {
 
   callSensorInfoService(sensor_idx) {
     var crop_user_idx = parseInt(this.shareService.selected_crop_user)
-    if (sensor_idx + 1 > this.shareService.sensor_info[crop_user_idx].length) {
+    if (sensor_idx >= this.shareService.sensor_info[crop_user_idx].length) {
       this.loading.dismiss()
       this.isSearchDataAvailable = true
       return
@@ -62,23 +62,24 @@ export class HistoryPage {
     
     var sensor_id = this.shareService.sensor_info[crop_user_idx][sensor_idx]._id
     var crop_user_id = this.shareService.crop_user[crop_user_idx]._id
-    this.backendService.getSensorHistory(sensor_id, crop_user_id, this.start_date_time, this.end_date_time).subscribe(allowed => {
-        if (allowed) {
+    this.backendService.getSensorHistory(
+      sensor_id, crop_user_id, this.start_date_time, this.end_date_time).subscribe(data => {
+        if (data && 200 === data.status) {
           setTimeout(() => {
-          this.sensor_data.push([])
-          this.labels.push([])
-          var idx = this.sensor_data.length - 1
-          this.sensor_data[idx].push({data:[], label:""})
+            var sensor_history = data.json()
+            this.sensor_data.push([])
+            this.labels.push([])
+            this.sensor_data[sensor_idx].push({data:[], label:""})
 
-          for (var i = 0;i < this.shareService.history_search_temp.length; ++i) {
-              this.sensor_data[idx][0].data.push(this.shareService.history_search_temp[i].value)
-              this.labels[idx].push("")//(this.shareService.history_search_temp[i].creation_date)
-          }
+            for (var i = 0;i < sensor_history.length; ++i) {
+                this.sensor_data[sensor_idx][0].data.push(sensor_history[i].value)
+                this.labels[sensor_idx].push(sensor_history[i].creation_date)
+            }
 
-          this.callSensorInfoService(sensor_idx + 1);
+            this.callSensorInfoService(sensor_idx + 1);
         });
         } else {
-          this.showError("Get sensor info failed");
+          this.showError("Get sensor history failed");
         }
       },
       error => {

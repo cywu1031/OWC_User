@@ -45,6 +45,15 @@ export class ChartSetting {
     public lineChartLegend:boolean = true;
     public lineChartType:string = 'line';
 
+    public pieChartType: string = 'pie'
+
+    public barChartType:string = 'bar';
+    public barChartOptions:any = {
+      scaleShowVerticalLines: false,
+      responsive: true
+    };
+    public barChartLegend:boolean = true;
+
     constructor() {
     }
 }

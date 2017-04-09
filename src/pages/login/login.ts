@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { AlertController, NavController, LoadingController, Loading } from 'ionic-angular';
 import { BackendService } from '../../providers/backend-service';
 import { TabsPage } from '../tabs/tabs';
+import { ShareService } from '../../providers/shareservice';
 
 /*
   Generated class for the Login page.
@@ -18,20 +19,19 @@ export class LoginPage {
   registerCredentials = {name: '', password: ''};
 
   constructor(public navCtrl: NavController, private backendService: BackendService, 
-              private loadingCtrl: LoadingController, private alertCtrl: AlertController) {
-  }
-
-  ionViewDidLoad() {
+              private loadingCtrl: LoadingController, private alertCtrl: AlertController,
+              private shareService: ShareService) {
   }
 
   loginSelected() {
       this.showLoading();
 
-      this.backendService.login(this.registerCredentials).subscribe(allowed => {
-        if (allowed) {
+      this.backendService.login(this.registerCredentials).subscribe(data => {
+        if (data && 200 === data.status) {
           setTimeout(() => {
-          this.loading.dismiss();
-          this.navCtrl.setRoot(TabsPage)
+            this.shareService.user_info = data.json()
+            this.loading.dismiss();
+            this.navCtrl.setRoot(TabsPage)
           });
         } else {
           this.showError("Login failed");

@@ -70,19 +70,47 @@ export class MyApp {
 
     this.showLoading()
 
-    this.backendService.getSensorData(this.backendService.getSensorDataUrl()).subscribe(allowed => {
-        if (allowed) {
-          setTimeout(() => {
-          this.shareService.isDataAvailable = true
-          this.loading.dismiss()
-          });
-        } else {
-          this.showError("Get sensor history failed");
-        }
-      },
-      error => {
-        this.showError(error);
-      });
+    var selected_crop_user_idx = parseInt(this.shareService.selected_crop_user)
+
+    var end = this.shareService.getBayTime()
+    var start = this.shareService.getBayTime()
+    start.subtract(this.shareService.real_time_data_range, 'm')
+
+    this.loadSensorData(selected_crop_user_idx, 0, start.toISOString(), end.toISOString())
+  }
+
+  loadSensorData(crop_user_idx, sensor_idx, start, end) {
+    if (sensor_idx >= this.shareService.sensor_info.length) {
+      this.shareService.isDataAvailable = true
+      this.loading.dismiss()
+      // this.callWaterHistory()
+      return
+    }
+
+    var sensor_id = this.shareService.sensor_info[crop_user_idx][sensor_idx]._id
+    var crop_user_id = this.shareService.crop_user[crop_user_idx]._id
+    this.backendService.getSensorHistory(sensor_id, crop_user_id, start, end).subscribe(data => {
+      if (data && 200 === data.status) {
+        setTimeout(() => {
+          var sensor_history = data.json()
+
+          this.shareService.real_time_sensor_data[sensor_idx][0].data = new Array(sensor_history.length) 
+          this.shareService.real_time_sensor_data_label[sensor_idx][0] = new Array(sensor_history.length)
+
+          for (var i = 0;i < sensor_history.length; ++i) {
+            this.shareService.real_time_sensor_data[sensor_idx][0].data[i] = parseFloat(sensor_history[i].value)
+            this.shareService.real_time_sensor_data_label[sensor_idx][i] = sensor_history[i].creation_date
+          }
+
+          this.loadSensorData(crop_user_idx, sensor_idx + 1, start, end)
+        });
+      } else {
+        this.showError("Get sensor id failed");
+      }
+    },
+    error => {
+      this.showError(error);
+    });
   }
 
   showLoading() {
