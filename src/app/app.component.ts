@@ -4,6 +4,7 @@ import { StatusBar, Splashscreen } from 'ionic-native';
 import { BackendService } from '../providers/backend-service';
 import { ShareService } from '../providers/shareservice';
 import { LoginPage } from '../pages/login/login';
+
 // import { Observable } from 'rxjs/Rx';
 import { Http } from '@angular/http';
 
@@ -67,23 +68,21 @@ export class MyApp {
     this.shareService.updateCropUser()
 
     this.shareService.isDataAvailable = false
-
-    this.showLoading()
+    
+    this.showLoading();
 
     var selected_crop_user_idx = parseInt(this.shareService.selected_crop_user)
-
     var end = this.shareService.getBayTime()
     var start = this.shareService.getBayTime()
     start.subtract(this.shareService.real_time_data_range, 'm')
 
-    this.loadSensorData(selected_crop_user_idx, 0, start.toISOString(), end.toISOString())
+    this.loadSensorData(selected_crop_user_idx, 0, start, end)
   }
 
+  
   loadSensorData(crop_user_idx, sensor_idx, start, end) {
-    if (sensor_idx >= this.shareService.sensor_info.length) {
-      this.shareService.isDataAvailable = true
-      this.loading.dismiss()
-      // this.callWaterHistory()
+    if (sensor_idx >= this.shareService.sensor_info[crop_user_idx].length) {
+      this.callWaterHistory()
       return
     }
 
@@ -105,12 +104,90 @@ export class MyApp {
           this.loadSensorData(crop_user_idx, sensor_idx + 1, start, end)
         });
       } else {
-        this.showError("Get sensor id failed");
+        this.showError("Get sensor data failed");
       }
     },
     error => {
       this.showError(error);
     });
+  }
+
+  callWaterHistory() {
+    var end = this.shareService.getBayTime()
+    var start = this.shareService.getBayTime()
+    start.subtract(this.shareService.real_time_data_range, 'm')
+    var crop_user_id = this.shareService.getCropUserId()
+
+    this.backendService.getWaterHistory(crop_user_id, start, end).subscribe(data => {
+        if (data && 200 === data.status) {
+          setTimeout(() => {
+            var water_history = data.json()
+
+            this.shareService.real_time_water_consumption_data[0][0].data = new Array(water_history.length) 
+            this.shareService.real_time_water_consumption_label[0][0] = new Array(water_history.length)
+
+            for (var i = 0;i < water_history.length; ++i) {
+              this.shareService.real_time_water_consumption_data[0][0].data[i] = parseFloat(water_history[i].value)
+              this.shareService.real_time_water_consumption_label[0][i] = water_history[i].creation_date
+            }
+
+            this.callDailyUsedWater()
+          });
+        } else {
+          this.showError("Get water history failed");
+        }
+      },
+      error => {
+        this.showError(error);
+      });
+  }
+
+  callDailyUsedWater() {
+    var crop_user_id = this.shareService.getCropUserId()
+    var start = this.shareService.getBayTime()
+    start.hour(0)
+    start.minute(0)
+    start.second(0)
+    var end = this.shareService.getBayTime()
+ 
+    this.backendService.getDailyUsedWater(crop_user_id, start, end).subscribe(data => {
+        if (data && 200 === data.status) {
+          setTimeout(() => {
+            var used = data.json()
+
+            this.shareService.real_time_daily_water_usage_data[0] = parseInt(used.total)
+            
+            this.callDailyWaterLimit()
+          });
+        } else {
+          this.showError("Get water history failed");
+        }
+      },
+      error => {
+        this.showError(error);
+      });
+  }
+
+  callDailyWaterLimit() {
+    var crop_user_id = this.shareService.getCropUserId()
+    var date = this.shareService.getBayTime()
+
+    this.backendService.getDailyWaterLimit(crop_user_id, date).subscribe(data => {
+        if (data && 200 === data.status) {
+          setTimeout(() => {
+            var limit = data.json()
+
+            this.shareService.real_time_daily_water_usage_data[1] = parseInt(limit.prediction) - this.shareService.real_time_daily_water_usage_data[0]
+            this.shareService.isDataAvailable = true
+            this.loading.dismiss()
+          });
+        } else {
+          this.showError("Get water history failed");
+        }
+      },
+      error => {
+        this.showError(error);
+      });
   }
 
   showLoading() {

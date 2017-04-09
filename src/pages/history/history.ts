@@ -8,6 +8,7 @@ import { BackendService } from '../../providers/backend-service';
 
 import { ChartSetting } from '../../providers/chart-setting';
 
+import * as moment from 'moment-timezone';
 
 @Component({
   selector: 'page-history',
@@ -22,14 +23,14 @@ export class HistoryPage {
   loading: Loading;
   sensor_data: any
   labels: any
+
+  water_history_data: any
+  water_history_label: any
   constructor(public navCtrl: NavController, private loadingCtrl: LoadingController, 
       private alertCtrl: AlertController, private shareService: ShareService, 
       private backendService: BackendService, private chartSetting: ChartSetting) {
       this.shareService.title = 'History';
       this.isSearchDataAvailable = false
-      this.chartSetting.lineChartLabels = [['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                                       ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                                       ['January', 'February', 'March', 'April', 'May', 'June', 'July']];
   }
 
   ionViewDidLoad() {
@@ -55,8 +56,7 @@ export class HistoryPage {
   callSensorInfoService(sensor_idx) {
     var crop_user_idx = parseInt(this.shareService.selected_crop_user)
     if (sensor_idx >= this.shareService.sensor_info[crop_user_idx].length) {
-      this.loading.dismiss()
-      this.isSearchDataAvailable = true
+      this.callWaterHistory()
       return
     }
     
@@ -80,6 +80,36 @@ export class HistoryPage {
         });
         } else {
           this.showError("Get sensor history failed");
+        }
+      },
+      error => {
+        this.showError(error);
+      });
+  }
+
+  callWaterHistory() {
+    var end = moment(this.start_date_time)
+    var start = moment(this.end_date_time)
+    var crop_user_id = this.shareService.getCropUserId()
+
+    this.backendService.getWaterHistory(crop_user_id, start, end).subscribe(data => {
+        if (data && 200 === data.status) {
+          setTimeout(() => {
+            var water_history = data.json()
+
+            this.water_history_data = new Array(water_history.length) 
+            this.water_history_label = new Array(water_history.length) 
+
+            for (var i = 0;i < water_history.length; ++i) {
+              this.water_history_data[i] = parseFloat(water_history[i].value)
+              this.water_history_label[i] = water_history[i].creation_date
+            }
+
+            this.loading.dismiss()
+            this.isSearchDataAvailable = true
+          });
+        } else {
+          this.showError("Get water history failed");
         }
       },
       error => {

@@ -24,9 +24,23 @@
     <ion-col>
       <button ion-button class="submit-btn" round full type="submit" (click)="submitSelected()">Submit</button>
     </ion-col>
-       
 
     <ion-col *ngIf="isSearchDataAvailable">
+      <ion-card>
+        <ion-card-header>
+          Water consumption history
+        </ion-card-header>
+        <ion-card-content>
+          <canvas baseChart
+                  [data]="water_history_data"
+                  [labels]="water_history_label"
+                  [options]="chartSetting.lineChartOptions"
+                  [colors]="chartSetting.lineChartColors[0]"
+                  [legend]="chartSetting.lineChartLegend"
+                  [chartType]="chartSetting.lineChartType"></canvas>
+        </ion-card-content>
+      </ion-card>
+
       <ion-card *ngFor="let sensor of shareService.sensor_info[shareService.selected_crop_user]; let i = index">
         <ion-card-header>
           {{sensor.name}}
