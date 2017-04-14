@@ -45,6 +45,8 @@ export class ChartSetting {
     public lineChartLegend:boolean = true;
     public lineChartType:string = 'line';
 
+    public doughnutChartType:string = 'doughnut';
+
     public pieChartType: string = 'pie'
 
     public barChartType:string = 'bar';

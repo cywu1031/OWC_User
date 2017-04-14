@@ -18,7 +18,6 @@ import { Http } from '@angular/http';
 export class DashboardPage {
   manual: any;
   update_interval: any
-
   constructor(public navCtrl: NavController, private shareService: ShareService, 
               private chartSetting: ChartSetting, private alertCtrl: AlertController, 
               private backendService: BackendService, private zone: NgZone, public http: Http) {

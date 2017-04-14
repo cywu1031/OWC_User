@@ -7,6 +7,7 @@ import { AnalysisPage } from '../analysis/analysis';
 import { ManagementPage } from '../management/management';
 import { ShareService } from '../../providers/shareservice';
 import { BackendService } from '../../providers/backend-service';
+
 // import { Observable } from 'rxjs/Rx';
 import { Http } from '@angular/http';
 
@@ -122,10 +123,12 @@ export class TabsPage {
 
           this.shareService.real_time_sensor_data[sensor_idx][0].data = new Array(sensor_history.length) 
           this.shareService.real_time_sensor_data_label[sensor_idx][0] = new Array(sensor_history.length)
-
+          this.shareService.real_time_sensor_data[sensor_idx][0].label = this.shareService.sensor_info[crop_user_idx][sensor_idx].name
           for (var i = 0;i < sensor_history.length; ++i) {
             this.shareService.real_time_sensor_data[sensor_idx][0].data[i] = parseFloat(sensor_history[i].value)
-            this.shareService.real_time_sensor_data_label[sensor_idx][i] = sensor_history[i].creation_date
+            var datetime = sensor_history[i].creation_date.split('T')
+            var time = datetime[1].split('.')
+            this.shareService.real_time_sensor_data_label[sensor_idx][i] = time[0]
           }
 
           this.loadSensorData(crop_user_idx, sensor_idx + 1, start, end)
@@ -145,7 +148,7 @@ export class TabsPage {
     start.subtract(this.shareService.real_time_data_range, 'm')
     var crop_user_id = this.shareService.getCropUserId()
 
-    this.backendService.getWaterHistory(crop_user_id, start, end).subscribe(data => {
+    this.backendService.getWaterHistory(crop_user_id, start.format('MM-DD-YY hh:mm'), end.format('MM-DD-YY hh:mm')).subscribe(data => {
         if (data && 200 === data.status) {
           setTimeout(() => {
             var water_history = data.json()
@@ -155,7 +158,9 @@ export class TabsPage {
 
             for (var i = 0;i < water_history.length; ++i) {
               this.shareService.real_time_water_consumption_data[0][0].data[i] = parseFloat(water_history[i].value)
-              this.shareService.real_time_water_consumption_label[0][i] = water_history[i].creation_date
+              var datetime = water_history[i].creation_date.split('T')
+              var time = datetime[1].split('.')
+              this.shareService.real_time_water_consumption_label[0][i] = time[0]
             }
 
             this.callDailyUsedWater()
@@ -177,7 +182,7 @@ export class TabsPage {
     start.second(0)
     var end = this.shareService.getBayTime()
  
-    this.backendService.getDailyUsedWater(crop_user_id, start, end).subscribe(data => {
+    this.backendService.getDailyUsedWater(crop_user_id, start.format('MM-DD-YYYY hh:mm'), end.format('MM-DD-YYYY hh:mm')).subscribe(data => {
         if (data && 200 === data.status) {
           setTimeout(() => {
             var used = data.json()
@@ -197,7 +202,7 @@ export class TabsPage {
 
   callDailyWaterLimit() {
     var crop_user_id = this.shareService.getCropUserId()
-    var date = this.shareService.getBayTime()
+    var date = this.shareService.getBayTime().format('YYYY-MM-DD')
 
     this.backendService.getDailyWaterLimit(crop_user_id, date).subscribe(data => {
         if (data && 200 === data.status) {
@@ -205,6 +210,15 @@ export class TabsPage {
             var limit = data.json()
 
             this.shareService.real_time_daily_water_usage_data[1] = parseInt(limit.prediction) - this.shareService.real_time_daily_water_usage_data[0]
+            
+            var ratio = 0
+            if (0 != this.shareService.real_time_daily_water_usage_data[1]) {
+              this.shareService.real_time_daily_water_usage_data[0] / this.shareService.real_time_daily_water_usage_data[1]
+            }
+            
+            ratio *= 100
+            this.shareService.daily_water_usage_header = "Daily water usage - " + ratio.toString() + '%'
+
             this.shareService.isDataAvailable = true
             this.loading.dismiss()
           });
@@ -219,7 +233,7 @@ export class TabsPage {
 
   showLoading() {
     this.loading = this.loadingCtrl.create({
-      content: 'Retrieving your info. Please wait...'
+      content: 'Retrieving your info...'
     });
     this.loading.present();
   }

@@ -92,7 +92,7 @@ export class HistoryPage {
     var start = moment(this.end_date_time)
     var crop_user_id = this.shareService.getCropUserId()
 
-    this.backendService.getWaterHistory(crop_user_id, start, end).subscribe(data => {
+    this.backendService.getWaterHistory(crop_user_id, start.format('MM-DD-YY hh:mm'), end.format('MM-DD-YY hh:mm')).subscribe(data => {
         if (data && 200 === data.status) {
           setTimeout(() => {
             var water_history = data.json()

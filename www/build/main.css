@@ -24387,99 +24387,16 @@ ion-navbar.toolbar {
   }
 }
 
-.popover-page .text-to-change div {
-  margin: 10px auto;
-}
-
-.popover-page ion-row,
-.popover-page ion-col {
-  padding: 0;
-}
-
-.popover-page .text-button {
-  padding-left: 0;
-  text-align: center;
-  min-height: 20px;
-  line-height: 18px;
-}
-
-.popover-page .text-button .item-inner {
-  padding-right: 0;
-}
-
-.popover-page .text-smaller {
-  font-size: 12px;
-}
-
-.popover-page .text-larger {
-  font-size: 16px;
-}
-
-.popover-page .row-dots {
-  text-align: center;
-}
-
-.popover-page .row-dots .dot {
-  height: 30px;
-  width: 30px;
-  border-radius: 50%;
-  margin: 10px auto;
+page-analysis .chartcontainer {
   position: relative;
+  height: 30%;
+  width: 70%;
 }
 
-.popover-page .dot-white {
-  background-color: white;
-}
-
-.popover-page .dot-tan {
-  background-color: #f9f1e4;
-}
-
-.popover-page .dot-grey {
-  background-color: #4c4b50;
-}
-
-.popover-page .dot-black {
-  background-color: black;
-}
-
-.popover-page .dot.selected {
-  border-width: 2px;
-  border-color: #327eff;
-}
-
-.popover-page .text-athelas {
-  font-family: "Athelas";
-}
-
-.popover-page .text-charter {
-  font-family: "Charter";
-}
-
-.popover-page .text-iowan {
-  font-family: "Iowan";
-}
-
-.popover-page .text-palatino {
-  font-family: "Palatino";
-}
-
-.popover-page .text-san-francisco {
-  font-family: "San Francisco";
-}
-
-.popover-page .text-seravek {
-  font-family: "Seravek";
-}
-
-.popover-page .text-times-new-roman {
-  font-family: "Times New Roman";
-}
-
-.popover-page .text-smaller,
-.popover-page .row-dots,
-.popover-page .dot {
-  border-width: 0.55px;
+page-dashboard .chartcontainer {
+  position: relative;
+  height: 50%;
+  width: 60%;
 }
 
 page-history .scroll-content {
@@ -24488,4 +24405,10 @@ page-history .scroll-content {
 
 page-history ion-card-header {
   font-weight: bold;
+}
+
+page-history .chartcontainer {
+  position: relative;
+  width: 50%;
+  margin: auto;
 }

@@ -19,7 +19,7 @@ export class BackendService {
     this.baseUrl = 'https://sjsusmartfarm-backend.herokuapp.com/';
     // this.baseUrl = 'http://localhost:3000/';
   }
- 
+
   public login(credentials) {
     if (credentials.name === null || credentials.password === null) {
       return Observable.throw("Please insert credentials");
@@ -124,8 +124,8 @@ export class BackendService {
   public getWaterHistory(crop_user_id, start, end) {
     return Observable.create(observer => {
       var url = this.baseUrl + 'water-history' 
-      url += '?start=' + start.format('MM-DD-YY hh:mm')
-      url += '&end=' + end.format('MM-DD-YY hh:mm')
+      url += '?start=' + start
+      url += '&end=' + end
       url += '&cropUserId=' + crop_user_id
 
       this.http.get(url)
@@ -143,8 +143,8 @@ export class BackendService {
     return Observable.create(observer => {
       var url = this.baseUrl + 'water-history/total-consumption' 
       url += '?cropUserId=' + crop_user_id
-      url += '&start=' + start.format('MM-DD-YYYY hh:mm')
-      url += '&end=' + end.format('MM-DD-YYYY hh:mm')
+      url += '&start=' + start
+      url += '&end=' + end
       
       this.http.get(url)
         .subscribe(data => {
@@ -161,7 +161,25 @@ export class BackendService {
     return Observable.create(observer => {
       var url = this.baseUrl + 'water-consumption-prediction/prediction' 
       url += '?crop_user_id=' + crop_user_id
-      url += '&date=' + date.format('YYYY-MM-DD')
+      url += '&date=' + date
+      
+      this.http.get(url)
+        .subscribe(data => {
+          observer.next(data);
+          observer.complete();
+         }, error => {
+           observer.next(null);
+           observer.complete();
+         });
+    });
+  }
+
+  public getPredictionRangeDaily(crop_user_id, start, end) {
+    return Observable.create(observer => {
+      var url = this.baseUrl + 'water-consumption-prediction/predictionByRange' 
+      url += '?crop_user_id=' + crop_user_id
+      url += '&start_date=' + start
+      url += '&end_date=' + end
       
       this.http.get(url)
         .subscribe(data => {

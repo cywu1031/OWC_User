@@ -118,7 +118,7 @@ export class MyApp {
     start.subtract(this.shareService.real_time_data_range, 'm')
     var crop_user_id = this.shareService.getCropUserId()
 
-    this.backendService.getWaterHistory(crop_user_id, start, end).subscribe(data => {
+    this.backendService.getWaterHistory(crop_user_id, start.format('MM-DD-YY hh:mm'), end.format('MM-DD-YY hh:mm')).subscribe(data => {
         if (data && 200 === data.status) {
           setTimeout(() => {
             var water_history = data.json()
@@ -150,7 +150,7 @@ export class MyApp {
     start.second(0)
     var end = this.shareService.getBayTime()
  
-    this.backendService.getDailyUsedWater(crop_user_id, start, end).subscribe(data => {
+    this.backendService.getDailyUsedWater(crop_user_id, start.format('MM-DD-YYYY hh:mm'), end.format('MM-DD-YYYY hh:mm')).subscribe(data => {
         if (data && 200 === data.status) {
           setTimeout(() => {
             var used = data.json()
@@ -170,7 +170,7 @@ export class MyApp {
 
   callDailyWaterLimit() {
     var crop_user_id = this.shareService.getCropUserId()
-    var date = this.shareService.getBayTime()
+    var date = this.shareService.getBayTime().format('YYYY-MM-DD')
 
     this.backendService.getDailyWaterLimit(crop_user_id, date).subscribe(data => {
         if (data && 200 === data.status) {
@@ -192,7 +192,7 @@ export class MyApp {
 
   showLoading() {
     this.loading = this.loadingCtrl.create({
-      content: 'Retrieving your info. Please wait...'
+      content: 'Retrieving your info...'
     });
     this.loading.present();
   }

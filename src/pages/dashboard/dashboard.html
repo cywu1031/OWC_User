@@ -9,7 +9,7 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content class="grid-basic-page">
   <ion-list>
     <ion-list-header>Control</ion-list-header>
 
@@ -47,36 +47,41 @@
     <ion-list-header>
       Water usage
     </ion-list-header>
+    <ion-row align-items-center  *ngIf="shareService.isDataAvailable">
 
-    <ion-col *ngIf="shareService.isDataAvailable">
-      <ion-card>
-        <ion-card-header>
-          Water consumptions
-        </ion-card-header>
-        <ion-card-content>
-          <canvas baseChart
-                    [datasets]="shareService.real_time_water_consumption_data[0]"
-                    [labels]="shareService.real_time_water_consumption_label[0]"
-                    [options]="chartSetting.lineChartOptions"
-                    [colors]="chartSetting.lineChartColors[0]"
-                    [legend]="chartSetting.lineChartLegend"
-                    [chartType]="chartSetting.lineChartType"></canvas>
-        </ion-card-content>
-      </ion-card>
+      <ion-col>
+        <ion-card>
+          <ion-card-header>
+            Water consumptions
+          </ion-card-header>
+          <ion-card-content>
+            <canvas baseChart
+                      [datasets]="shareService.real_time_water_consumption_data[0]"
+                      [labels]="shareService.real_time_water_consumption_label[0]"
+                      [options]="chartSetting.lineChartOptions"
+                      [colors]="chartSetting.lineChartColors[0]"
+                      [legend]="chartSetting.lineChartLegend"
+                      [chartType]="chartSetting.lineChartType"></canvas>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
 
-      <ion-card>
-        <ion-card-header>
-          Daily water usage
-        </ion-card-header>
-        <ion-card-content>
-          <canvas baseChart
-                    [data]="shareService.real_time_daily_water_usage_data"
-                    [labels]="shareService.real_time_daily_water_usage_label"
-                    [chartType]="chartSetting.pieChartType"></canvas>
-        </ion-card-content>
-      </ion-card>
-
-    </ion-col>
+      <ion-col>
+        
+        <ion-card class="chartcontainer">
+          <ion-card-header>
+            {{shareService.daily_water_usage_header}}
+          </ion-card-header>
+          <ion-card-content>
+            <canvas baseChart
+                      [data]="shareService.real_time_daily_water_usage_data"
+                      [labels]="shareService.real_time_daily_water_usage_label"
+                      [chartType]="chartSetting.doughnutChartType"></canvas>
+          </ion-card-content>
+        </ion-card>
+        
+      </ion-col>
+    </ion-row>
 
   </ion-list>
 
@@ -85,26 +90,28 @@
       Sensors
     </ion-list-header>
 
-    <ion-col *ngIf="shareService.isDataAvailable">
-      <ion-card *ngFor="let sensor of shareService.sensor_info[shareService.selected_crop_user]; let i = index">
-        <ion-card-header>
-          {{sensor.name}}
-        </ion-card-header>
-        <ion-card-content>
-          <canvas baseChart
-                  [datasets]="shareService.real_time_sensor_data[i]"
-                  [labels]="shareService.real_time_sensor_data_label[i]"
-                  [options]="chartSetting.lineChartOptions"
-                  [colors]="chartSetting.lineChartColors[i]"
-                  [legend]="chartSetting.lineChartLegend"
-                  [chartType]="chartSetting.lineChartType"></canvas>
-        </ion-card-content>
-      </ion-card>
-    </ion-col>
+    <ion-row align-items-center  *ngIf="shareService.isDataAvailable">
+      <ion-col *ngFor="let sensor of shareService.sensor_info[shareService.selected_crop_user]; let i = index">
+        <ion-card>
+          <ion-card-header>
+            {{sensor.name}}
+          </ion-card-header>
+          <ion-card-content>
+            <canvas baseChart
+                    [datasets]="shareService.real_time_sensor_data[i]"
+                    [labels]="shareService.real_time_sensor_data_label[i]"
+                    [options]="chartSetting.lineChartOptions"
+                    [colors]="chartSetting.lineChartColors[i]"
+                    [legend]="chartSetting.lineChartLegend"
+                    [chartType]="chartSetting.lineChartType"></canvas>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
 
   </ion-list>
 
-  <ion-list>
+  <!-- <ion-list>
     <ion-list-header>
       Weather
     </ion-list-header>
@@ -135,6 +142,6 @@
         <canvas #solarRadiationCanvas></canvas>
       </ion-card-content>
     </ion-card>
-  </ion-list>
+  </ion-list> -->
 
 </ion-content>

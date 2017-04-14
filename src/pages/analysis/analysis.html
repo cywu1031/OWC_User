@@ -50,8 +50,8 @@
             <ion-list>
               <ion-item>
                 <ion-label>Range</ion-label>
-                <ion-select [(ngModel)]="range" (ionChange)="onRangeSelected()">
-                  <ion-option value="ThreeDay">Three days</ion-option>
+                <ion-select [(ngModel)]="range" (ionChange)="onRangeSelected($event)">
+                  <ion-option value="ThreeDays">Three days</ion-option>
                   <ion-option value="OneWeek">One week</ion-option>
                   <ion-option value="OneMonth">One month</ion-option>
                 </ion-select>
@@ -66,20 +66,25 @@
         <ion-col>
         </ion-col>
 
+        <ion-col>
+        </ion-col>
+
       </ion-row> 
 
-      <ion-col *ngIf="data_ready">
-        <ion-card>
-          <ion-card-content>
-            <canvas baseChart
-                      [datasets]=""
-                      [labels]=""
-                      [options]="chartSetting.barChartOptions"
-                      [legend]="chartSetting.barChartLegend"
-                      [chartType]="chartSetting.barChartType"></canvas>
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
+      <ion-row>
+        <ion-col *ngIf="data_ready">
+          <ion-card  class="chartcontainer">
+            <ion-card-content>
+              <canvas baseChart
+                        [datasets]="water_usage_datasets"
+                        [labels]="water_usage_label"
+                        [options]="chartSetting.barChartOptions"
+                        [legend]="chartSetting.barChartLegend"
+                        [chartType]="chartSetting.barChartType"></canvas>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
   </ion-list>
 
 </ion-content>

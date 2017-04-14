@@ -25,6 +25,8 @@ export class ShareService {
 
     isDataAvailable: any
 
+    daily_water_usage_header: any
+
     constructor() {
         this.title = 'Dashboard'
 
