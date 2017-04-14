@@ -24392,6 +24392,10 @@ page-analysis .chartcontainer {
   width: 70%;
 }
 
+page-analysis .app-font-20 {
+  font-size: 20px;
+}
+
 page-dashboard .chartcontainer {
   position: relative;
   height: 50%;

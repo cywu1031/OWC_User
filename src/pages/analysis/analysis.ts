@@ -22,6 +22,10 @@ export class AnalysisPage {
   water_usage_label: any
   water_usage_datasets: any
   date_map: any
+  water_optimize_header: any
+  prediction_sum: any
+  consumption_sum: any
+  optimized: any
   constructor(public navCtrl: NavController, private shareService: ShareService, 
     private backendService: BackendService, private loadingCtrl: LoadingController, 
     private alertCtrl: AlertController, private chartSetting: ChartSetting) {
@@ -41,7 +45,9 @@ export class AnalysisPage {
     this.water_usage_datasets.push({data:[], label:'Daily water usage'})
     this.water_usage_datasets.push({data:[], label:'Daily water limit'})
     this.date_map = {}
-
+    this.prediction_sum = 0
+    this.consumption_sum = 0
+    this.optimized = 0
     this.getWaterPredictionDaily()
   }
 
@@ -78,8 +84,10 @@ export class AnalysisPage {
               this.date_map[date] = i
               this.water_usage_label.push(date)
               this.water_usage_datasets[1].data.push(daily_prediction[i].prediction)
+              this.prediction_sum += daily_prediction[i].prediction
             }
 
+            this.prediction_sum = this.prediction_sum.toFixed(2)
             this.getWaterUsageDaily(crop_user_id, start, end)
           });
         } else {
@@ -111,7 +119,16 @@ export class AnalysisPage {
               for (var i = 0;i < water_history.length; ++i) {
                 var date = water_history[i].creation_date.split('T')[0]
                 this.water_usage_datasets[0].data[this.date_map[date]] += parseInt(water_history[i].water_consumption)
+                this.consumption_sum += parseInt(water_history[i].water_consumption)
               }
+            }
+
+            this.consumption_sum = this.consumption_sum.toFixed(2)
+            if (0 !== this.prediction_sum) {
+              this.optimized = this.consumption_sum / this.prediction_sum
+              this.optimized *= 100
+              this.optimized = 100 - this.optimized
+              this.optimized = this.optimized.toFixed(2)
             }
 
             this.data_ready = true

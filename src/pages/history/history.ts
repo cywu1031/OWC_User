@@ -119,7 +119,7 @@ export class HistoryPage {
 
   showLoading() {
     this.loading = this.loadingCtrl.create({
-      content: 'Retrieving your info. Please wait...'
+      content: 'Retrieving your info...'
     });
     this.loading.present();
   }
