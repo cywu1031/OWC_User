@@ -191,4 +191,20 @@ export class BackendService {
          });
     });
   }
+
+  public switchValve(onoff) {
+    return Observable.create(observer => {
+      var url = this.baseUrl + 'arduino_valve_control' 
+      url += '?switch=' + onoff
+      
+      this.http.put(url, "")
+        .subscribe(data => {
+          observer.next(data);
+          observer.complete();
+         }, error => {
+           observer.next(null);
+           observer.complete();
+         });
+    });
+  }
 }

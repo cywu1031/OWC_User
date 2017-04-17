@@ -27,42 +27,16 @@ export class TabsPage {
   constructor(private shareService: ShareService, private backendService: BackendService,
               private loadingCtrl: LoadingController, private alertCtrl: AlertController, 
               public http: Http, private zone: NgZone) {
-    this.loadCropUserInfo()
+    this.loadSensorInfo()
   }
 
   tabChange(tab: Tab){
 
   }
 
-  loadCropUserInfo() {
+  loadSensorInfo() {
     this.showLoading();
 
-    this.backendService.getCropUser(this.shareService.user_info._id).subscribe(data => {
-        if (data && 200 === data.status) {
-          setTimeout(() => {
-            for (var i = data.json().length - 1;i >= 0; --i) {
-              this.shareService.crop_user.push(data.json()[i])
-            }
-
-            this.shareService.sensor_info = new Array(this.shareService.crop_user.length)
-            
-            for (var i = 0;i < this.shareService.sensor_info.length; ++i) {
-              this.shareService.sensor_info[i] = new Array()
-            }
-
-            this.shareService.updateCropUser()
-            this.loadSensorInfo()
-          });
-        } else {
-          this.showError("Get crop user failed");
-        }
-      },
-      error => {
-        this.showError(error);
-      });
-  }
-
-  loadSensorInfo() {
     if (0 === this.shareService.crop_user.length) {
       this.showError("No crop user")
       return
@@ -148,7 +122,7 @@ export class TabsPage {
     start.subtract(this.shareService.real_time_data_range, 'm')
     var crop_user_id = this.shareService.getCropUserId()
 
-    this.backendService.getWaterHistory(crop_user_id, start.format('MM-DD-YY hh:mm'), end.format('MM-DD-YY hh:mm')).subscribe(data => {
+    this.backendService.getWaterHistory(crop_user_id, start.format('MM-DD-YY HH:mm'), end.format('MM-DD-YY HH:mm')).subscribe(data => {
         if (data && 200 === data.status) {
           setTimeout(() => {
             var water_history = data.json()
@@ -157,7 +131,7 @@ export class TabsPage {
             this.shareService.real_time_water_consumption_label[0][0] = new Array(water_history.length)
 
             for (var i = 0;i < water_history.length; ++i) {
-              this.shareService.real_time_water_consumption_data[0][0].data[i] = parseFloat(water_history[i].value)
+              this.shareService.real_time_water_consumption_data[0][0].data[i] = parseFloat(water_history[i].water_consumption)
               var datetime = water_history[i].creation_date.split('T')
               var time = datetime[1].split('.')
               this.shareService.real_time_water_consumption_label[0][i] = time[0]
@@ -182,12 +156,12 @@ export class TabsPage {
     start.second(0)
     var end = this.shareService.getBayTime()
  
-    this.backendService.getDailyUsedWater(crop_user_id, start.format('MM-DD-YYYY hh:mm'), end.format('MM-DD-YYYY hh:mm')).subscribe(data => {
+    this.backendService.getDailyUsedWater(crop_user_id, start.format('MM-DD-YYYY HH:mm'), end.format('MM-DD-YYYY HH:mm')).subscribe(data => {
         if (data && 200 === data.status) {
           setTimeout(() => {
             var used = data.json()
 
-            this.shareService.real_time_daily_water_usage_data[0] = parseInt(used.total)
+            this.shareService.real_time_daily_water_usage_data[0] = parseFloat(used.total)
             
             this.callDailyWaterLimit()
           });
@@ -209,7 +183,7 @@ export class TabsPage {
           setTimeout(() => {
             var limit = data.json()
 
-            this.shareService.real_time_daily_water_usage_data[1] = parseInt(limit.prediction) - this.shareService.real_time_daily_water_usage_data[0]
+            this.shareService.real_time_daily_water_usage_data[1] = parseFloat(limit.prediction) - this.shareService.real_time_daily_water_usage_data[0]
             
             var ratio = 0
             if (0 != this.shareService.real_time_daily_water_usage_data[1]) {

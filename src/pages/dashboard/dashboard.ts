@@ -7,8 +7,14 @@ import { ShareService } from '../../providers/shareservice';
 import { ChartSetting } from '../../providers/chart-setting';
 
 import { BackendService } from '../../providers/backend-service';
+
+import Chart from 'chart.js'
+
 // import { Observable } from 'rxjs/Rx';
 import { Http } from '@angular/http';
+
+import * as io from 'socket.io-client';
+
 @Component({
   selector: 'page-dashboard',
   templateUrl: 'dashboard.html',
@@ -18,80 +24,77 @@ import { Http } from '@angular/http';
 export class DashboardPage {
   manual: any;
   update_interval: any
+  socket: any
+  water_canvas: any
+  irrigate: any
   constructor(public navCtrl: NavController, private shareService: ShareService, 
               private chartSetting: ChartSetting, private alertCtrl: AlertController, 
               private backendService: BackendService, private zone: NgZone, public http: Http) {
     this.manual = false;
+    this.irrigate = false;
     // this.initSensorData();
-    this.initWeatherData();
     this.shareService.title = 'Dashboard';
     this.chartSetting.lineChartLabels = [['January', 'February', 'March', 'April', 'May', 'June', 'July'],
                                        ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
                                        ['January', 'February', 'March', 'April', 'May', 'June', 'July']];
+    this.water_canvas = document.getElementById('water_canvas')
+
   }
 
   ionViewDidLoad() {
-    // Observable.interval(5000)
-    //             .switchMap(() => this.http.get(this.backendService.getSensorDataUrl()))
-    //             .map((data) => data.json())
-    //             .subscribe((data) => {
-    //               this.zone.run(() => {
-    //                 if (0 === this.shareService.sensor_info.length) {
-    //                   return
-    //                 }
-    //                 var selected_crop_user_idx = parseInt(this.shareService.selected_crop_user)
+    this.socket = io.connect(this.backendService.baseUrl);
+    var selected_crop_user_idx = parseInt(this.shareService.selected_crop_user)
+    var crop_user_id = this.shareService.crop_user[selected_crop_user_idx]._id
 
-    //                 for (var i = 0; i < this.shareService.sensor_info[selected_crop_user_idx].length; ++i) {
-    //                   var id = this.shareService.sensor_info[selected_crop_user_idx][i]._id
+    this.socket.on(crop_user_id, (msg) =>{
+      //this.zone.run(() =>{
+        let data = this.shareService.real_time_water_consumption_data
+        data.push(parseInt(msg))
+        delete this.shareService.real_time_water_consumption_data
+        
+        let label = this.shareService.real_time_water_consumption_label
+        label.push('test')
+        delete this.shareService.real_time_water_consumption_label
 
-    //                   if (data[id]) {
-    //                     var sensor_data = data[id]
-    //                     var k = 0
-    //                     this.shareService.real_time_sensor_data[i][0].data = new Array(sensor_data.length) 
-    //                     for (var j = sensor_data.length - 1;j >= 0; --j) {
-    //                       this.shareService.real_time_sensor_data[i][0].data[k++] = parseInt(sensor_data[j].value)
-    //                     }
-    //                   }
-    //                 }
-    //               });
-    //             })
+        this.shareService.real_time_water_consumption_data = data
+        this.shareService.real_time_water_consumption_label = label
 
-  }
+        var option = {
+          showLines: true
+        };
+        var myLineChart = Chart.Line(this.water_canvas,{
+                                  data: this.shareService.real_time_water_consumption_data,
+                                  labels: this.shareService.real_time_water_consumption_label,
+                                  options:option})
 
-  // initSensorData() {
-  //   this.chartSetting.lineChartData = [[{data: [65, 59, 80, 81, 56, 55, 40], label: 'Series A'}],
-  //       [{data: [28, 48, 40, 19, 86, 27, 90], label: 'Series B'}],
-  //       [{data: [18, 48, 77, 9, 100, 27, 40], label: 'Series C'}]]
+        myLineChart.update()
 
-  //   this.chartSetting.lineChartLabels = [['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-  //                                      ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-  //                                      ['January', 'February', 'March', 'April', 'May', 'June', 'July']];
-  // }
-
-  initWeatherData() {
+     // });
+    });
   }
 
   irrigateSelected() {
+
   }
 
   toggleChanged() {
-    // if ('Dashboard' === this.shareService.title) {
-    //   this.shareService.title = '999'
-    // } else {
-    //   this.shareService.title = 'Dashboard'
-    // }
-    // var selected_crop_user_idx = parseInt(this.shareService.selected_crop_user)
+    var onoff = 'off'
+    if (this.irrigate) {
+      onoff = 'on'
+    }
 
-    // for (var i = 0; i < this.shareService.sensor_info[selected_crop_user_idx].length; ++i) {
-    //   var id = this.shareService.sensor_info[selected_crop_user_idx][i]._id
-
-    //   var sensor_data = [80,40,60,50,80]
-    //   var k = 0
-    //   let clone = JSON.parse(JSON.stringify(this.shareService.real_time_sensor_data[i][0]))
-    //   clone.data = sensor_data
-    //   this.shareService.real_time_sensor_data[i][0] = clone
-
-    // }
+    this.backendService.switchValve(onoff).subscribe(data => {
+        if (data && 200 === data.status) {
+          setTimeout(() => {
+          });
+        } else {
+          this.showError("Fail to control the valve");
+          this.irrigate = !this.irrigate
+        }
+      },
+      error => {
+        this.showError(error);
+      });
   }
 
   showError(text) {

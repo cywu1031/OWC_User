@@ -98,7 +98,9 @@ export class MyApp {
 
           for (var i = 0;i < sensor_history.length; ++i) {
             this.shareService.real_time_sensor_data[sensor_idx][0].data[i] = parseFloat(sensor_history[i].value)
-            this.shareService.real_time_sensor_data_label[sensor_idx][i] = sensor_history[i].creation_date
+            var datetime = sensor_history[i].creation_date.split('T')
+            var time = datetime[1].split('.')
+            this.shareService.real_time_sensor_data_label[sensor_idx][i] = time[0]
           }
 
           this.loadSensorData(crop_user_idx, sensor_idx + 1, start, end)
@@ -127,8 +129,10 @@ export class MyApp {
             this.shareService.real_time_water_consumption_label[0][0] = new Array(water_history.length)
 
             for (var i = 0;i < water_history.length; ++i) {
-              this.shareService.real_time_water_consumption_data[0][0].data[i] = parseFloat(water_history[i].value)
-              this.shareService.real_time_water_consumption_label[0][i] = water_history[i].creation_date
+              this.shareService.real_time_water_consumption_data[0][0].data[i] = parseFloat(water_history[i].water_consumption)
+              var datetime = water_history[i].creation_date.split('T')
+              var time = datetime[1].split('.')
+              this.shareService.real_time_water_consumption_label[0][i] = time[0]
             }
 
             this.callDailyUsedWater()
@@ -155,7 +159,7 @@ export class MyApp {
           setTimeout(() => {
             var used = data.json()
 
-            this.shareService.real_time_daily_water_usage_data[0] = parseInt(used.total)
+            this.shareService.real_time_daily_water_usage_data[0] = parseFloat(used.total)
             
             this.callDailyWaterLimit()
           });
@@ -177,7 +181,16 @@ export class MyApp {
           setTimeout(() => {
             var limit = data.json()
 
-            this.shareService.real_time_daily_water_usage_data[1] = parseInt(limit.prediction) - this.shareService.real_time_daily_water_usage_data[0]
+            this.shareService.real_time_daily_water_usage_data[1] = parseFloat(limit.prediction) - this.shareService.real_time_daily_water_usage_data[0]
+
+            var ratio = 0
+            if (0 != this.shareService.real_time_daily_water_usage_data[1]) {
+              this.shareService.real_time_daily_water_usage_data[0] / this.shareService.real_time_daily_water_usage_data[1]
+            }
+            
+            ratio *= 100
+            this.shareService.daily_water_usage_header = "Daily water usage - " + ratio.toString() + '%'
+
             this.shareService.isDataAvailable = true
             this.loading.dismiss()
           });

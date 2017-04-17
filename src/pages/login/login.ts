@@ -30,11 +30,38 @@ export class LoginPage {
         if (data && 200 === data.status) {
           setTimeout(() => {
             this.shareService.user_info = data.json()
+            this.loadCropUserInfo()
+          });
+        } else {
+          this.showError("Login failed");
+        }
+      },
+      error => {
+        this.showError(error);
+      });
+  }
+
+  loadCropUserInfo() {
+    this.backendService.getCropUser(this.shareService.user_info._id).subscribe(data => {
+        if (data && 200 === data.status) {
+          setTimeout(() => {
+            for (var i = data.json().length - 1;i >= 0; --i) {
+              this.shareService.crop_user.push(data.json()[i])
+            }
+
+            this.shareService.sensor_info = new Array(this.shareService.crop_user.length)
+            
+            for (var i = 0;i < this.shareService.sensor_info.length; ++i) {
+              this.shareService.sensor_info[i] = new Array()
+            }
+
+            this.shareService.updateCropUser()
+
             this.loading.dismiss();
             this.navCtrl.setRoot(TabsPage)
           });
         } else {
-          this.showError("Login failed");
+          this.showError("Get crop user failed");
         }
       },
       error => {

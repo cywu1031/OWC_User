@@ -15,30 +15,14 @@
 
     <ion-item clear>
       <ion-label>Manual Control</ion-label>
-      <ion-toggle checked="false" [(ngModel)]="manual" (ionChange)="toggleChanged()"></ion-toggle>
+      <ion-toggle checked="false" [(ngModel)]="manual"></ion-toggle>
     </ion-item>
 
     <ion-grid *ngIf="manual">
-      <ion-row>
-        <ion-col>
-          <ion-item>
-            <ion-label>Manual irrigation</ion-label>
-            <ion-toggle color="secondary" checked="false"></ion-toggle>
-          </ion-item>
-        </ion-col>
-        <ion-col>
-        </ion-col>
-        <ion-col>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col *ngFor="let sensor of shareService.sensor_info[shareService.selected_crop_user]">
-          <ion-item>
-            <ion-label>{{sensor.name}}</ion-label>
-            <ion-toggle color="secondary" checked="true"></ion-toggle>
-          </ion-item>
-        </ion-col>
-      </ion-row>
+      <ion-item>
+        <ion-label>Manual irrigation</ion-label>
+        <ion-toggle color="secondary" checked="false" [(ngModel)]="irrigate" (ionChange)="toggleChanged()"></ion-toggle>
+      </ion-item>
     </ion-grid>
 
   </ion-list>
@@ -55,8 +39,8 @@
             Water consumptions
           </ion-card-header>
           <ion-card-content>
-            <canvas baseChart
-                      [datasets]="shareService.real_time_water_consumption_data[0]"
+            <canvas id="water_canvas" baseChart
+                      [datasets]="shareService.real_time_water_consumption_data"
                       [labels]="shareService.real_time_water_consumption_label[0]"
                       [options]="chartSetting.lineChartOptions"
                       [colors]="chartSetting.lineChartColors[0]"
