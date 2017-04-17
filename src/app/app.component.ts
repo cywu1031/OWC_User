@@ -120,7 +120,7 @@ export class MyApp {
     start.subtract(this.shareService.real_time_data_range, 'm')
     var crop_user_id = this.shareService.getCropUserId()
 
-    this.backendService.getWaterHistory(crop_user_id, start.format('MM-DD-YY hh:mm'), end.format('MM-DD-YY hh:mm')).subscribe(data => {
+    this.backendService.getWaterHistory(crop_user_id, start.format('MM-DD-YY HH:mm'), end.format('MM-DD-YY HH:mm')).subscribe(data => {
         if (data && 200 === data.status) {
           setTimeout(() => {
             var water_history = data.json()
@@ -154,7 +154,7 @@ export class MyApp {
     start.second(0)
     var end = this.shareService.getBayTime()
  
-    this.backendService.getDailyUsedWater(crop_user_id, start.format('MM-DD-YYYY hh:mm'), end.format('MM-DD-YYYY hh:mm')).subscribe(data => {
+    this.backendService.getDailyUsedWater(crop_user_id, start.format('MM-DD-YYYY HH:mm'), end.format('MM-DD-YYYY HH:mm')).subscribe(data => {
         if (data && 200 === data.status) {
           setTimeout(() => {
             var used = data.json()

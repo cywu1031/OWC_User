@@ -73,7 +73,9 @@ export class HistoryPage {
 
             for (var i = 0;i < sensor_history.length; ++i) {
                 this.sensor_data[sensor_idx][0].data.push(sensor_history[i].value)
-                this.labels[sensor_idx].push(sensor_history[i].creation_date)
+                var datetime = sensor_history[i].creation_date.split('T')
+                var time = datetime[1].split('.')
+                this.labels[sensor_idx].push(time[0])
             }
 
             this.callSensorInfoService(sensor_idx + 1);
@@ -92,7 +94,7 @@ export class HistoryPage {
     var start = moment(this.end_date_time)
     var crop_user_id = this.shareService.getCropUserId()
 
-    this.backendService.getWaterHistory(crop_user_id, start.format('MM-DD-YY hh:mm'), end.format('MM-DD-YY hh:mm')).subscribe(data => {
+    this.backendService.getWaterHistory(crop_user_id, start.format('MM-DD-YY HH:mm'), end.format('MM-DD-YY HH:mm')).subscribe(data => {
         if (data && 200 === data.status) {
           setTimeout(() => {
             var water_history = data.json()
