@@ -8,7 +8,6 @@ import { BackendService } from '../../providers/backend-service';
 
 import { ChartSetting } from '../../providers/chart-setting';
 
-import * as moment from 'moment-timezone';
 
 @Component({
   selector: 'page-history',
@@ -90,11 +89,11 @@ export class HistoryPage {
   }
 
   callWaterHistory() {
-    var end = moment(this.start_date_time)
-    var start = moment(this.end_date_time)
+    var end = this.shareService.getTimeFormat(this.end_date_time)
+    var start = this.shareService.getTimeFormat(this.start_date_time)
     var crop_user_id = this.shareService.getCropUserId()
 
-    this.backendService.getWaterHistory(crop_user_id, start.format('MM-DD-YY HH:mm'), end.format('MM-DD-YY HH:mm')).subscribe(data => {
+    this.backendService.getWaterHistory(crop_user_id, start, end).subscribe(data => {
         if (data && 200 === data.status) {
           setTimeout(() => {
             var water_history = data.json()
@@ -103,8 +102,10 @@ export class HistoryPage {
             this.water_history_label = new Array(water_history.length) 
 
             for (var i = 0;i < water_history.length; ++i) {
-              this.water_history_data[i] = parseFloat(water_history[i].value)
-              this.water_history_label[i] = water_history[i].creation_date
+              this.water_history_data[i] = parseFloat(water_history[i].water_consumption)
+              var datetime = water_history[i].creation_date.split('T')
+              var time = datetime[1].split('.')
+              this.water_history_label[i] = time[0]
             }
 
             this.loading.dismiss()

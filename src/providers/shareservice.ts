@@ -81,4 +81,13 @@ export class ShareService {
         var now = moment().utc()
         return now.subtract(7, 'h')
     }
+
+    public getTimeFormat(date_time) {
+        var date = date_time.split('T')[0]
+        var time = date_time.split('T')[1]
+
+        date = date.split('-')
+        time = time.split(':')
+        return date[1] + '-' + date[2] + '-' + date[0] + ' ' + time[0] + ':' + time[1]
+    }
 }

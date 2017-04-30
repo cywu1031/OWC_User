@@ -40,7 +40,7 @@
           </ion-card-header>
           <ion-card-content>
             <canvas id="water_canvas" baseChart
-                      [datasets]="shareService.real_time_water_consumption_data"
+                      [datasets]="shareService.real_time_water_consumption_data[0]"
                       [labels]="shareService.real_time_water_consumption_label[0]"
                       [options]="chartSetting.lineChartOptions"
                       [colors]="chartSetting.lineChartColors[0]"

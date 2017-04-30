@@ -117,12 +117,13 @@ export class TabsPage {
   }
 
   callWaterHistory() {
-    var end = this.shareService.getBayTime()
+    var end = this.shareService.getTimeFormat(this.shareService.getBayTime().toISOString())
     var start = this.shareService.getBayTime()
     start.subtract(this.shareService.real_time_data_range, 'm')
+    start = this.shareService.getTimeFormat(start.toISOString())
     var crop_user_id = this.shareService.getCropUserId()
 
-    this.backendService.getWaterHistory(crop_user_id, start.format('MM-DD-YY HH:mm'), end.format('MM-DD-YY HH:mm')).subscribe(data => {
+    this.backendService.getWaterHistory(crop_user_id, start, end).subscribe(data => {
         if (data && 200 === data.status) {
           setTimeout(() => {
             var water_history = data.json()
