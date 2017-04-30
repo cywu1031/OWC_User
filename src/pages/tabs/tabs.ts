@@ -186,13 +186,16 @@ export class TabsPage {
 
             this.shareService.real_time_daily_water_usage_data[1] = parseFloat(limit.prediction) - this.shareService.real_time_daily_water_usage_data[0]
             
-            var ratio = 0
-            if (0 != this.shareService.real_time_daily_water_usage_data[1]) {
-              this.shareService.real_time_daily_water_usage_data[0] / this.shareService.real_time_daily_water_usage_data[1]
+            var ratio = 0            
+            if (this.shareService.real_time_daily_water_usage_data[1] < 0) {
+              this.shareService.real_time_daily_water_usage_data[1] = 0
+              ratio = this.shareService.real_time_daily_water_usage_data[0] / parseFloat(limit.prediction)
+            } else if (0 != this.shareService.real_time_daily_water_usage_data[1]) {
+              ratio = this.shareService.real_time_daily_water_usage_data[0] / this.shareService.real_time_daily_water_usage_data[1]
             }
             
             ratio *= 100
-            this.shareService.daily_water_usage_header = "Daily water usage - " + ratio.toString() + '%'
+            this.shareService.daily_water_usage_header = "Daily water usage: " + ratio.toString() + '%'
 
             this.shareService.isDataAvailable = true
             this.loading.dismiss()
