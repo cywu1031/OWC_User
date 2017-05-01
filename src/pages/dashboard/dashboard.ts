@@ -27,6 +27,8 @@ export class DashboardPage {
   socket: any
   water_canvas: any
   irrigate: any
+  mad: any
+  pouring_time: any
   constructor(public navCtrl: NavController, private shareService: ShareService, 
               private chartSetting: ChartSetting, private alertCtrl: AlertController, 
               private backendService: BackendService, private zone: NgZone, public http: Http) {

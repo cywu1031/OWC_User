@@ -53,7 +53,9 @@ export class FarmEditPage {
               '<br>Stage: ' + this.farm.stage + 
               '<br>Field capacity: ' + this.farm.field_capacity + 
               '<br>Field size: ' + this.farm.field_size + 
+              '<br>Garden size: ' + this.farm.acreage +
               '<br>MAD: ' + this.farm.mad + 
+              '<br>Water pouring time: ' + this.farm.water_pouring_time +
               '<br>Description: ' + this.farm.description;
 
     let confirm = this.alertCtrl.create({

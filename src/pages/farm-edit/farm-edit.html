@@ -35,9 +35,31 @@
     </ion-item>
 
     <ion-item>
-        <ion-label stacked>MAD</ion-label>
-        <ion-input type="text" [(ngModel)]="farm.mad"></ion-input>
+        <ion-label stacked>Garden size</ion-label>
+        <ion-input type="text" [(ngModel)]="farm.acreage"></ion-input>
     </ion-item>
+
+    <ion-row>
+        <ion-col>
+            <!-- <ion-item> -->
+            <ion-label stacked>MAD: {{farm.mad}}</ion-label> 
+            
+            <ion-range min="0" max="45" [(ngModel)]="farm.mad">
+                </ion-range>
+           
+            <!-- </ion-item> -->
+        </ion-col>
+
+        <ion-col>
+            <!-- <ion-item> -->
+            <ion-label stacked>Water pouring time: {{farm.water_pouring_time}} ms</ion-label> 
+            
+            <ion-range min="500" max="5000" [(ngModel)]="farm.water_pouring_time">
+            </ion-range>
+                
+            <!-- </ion-item> -->
+        </ion-col>
+    </ion-row>
 
     <ion-item>
         <ion-label stacked>Description</ion-label>

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
+import { ShareService } from '../../providers/shareservice';
 
 /*
   Generated class for the FarmDetail page.
@@ -13,9 +14,16 @@ import { NavController, NavParams } from 'ionic-angular';
 })
 export class FarmDetailPage {
   farm: any;
-
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  crop_name: any
+  constructor(public navCtrl: NavController, public navParams: NavParams, 
+    private shareService: ShareService) {
       this.farm = navParams.get('farm');
+      for (var i = 0;i < this.shareService.crops.length;++i) {
+        if (this.shareService.crops[i]._id === this.farm.crop_id) {
+          this.crop_name = this.shareService.crops[i].name
+          break
+        }
+      }
   }
 
   ionViewDidLoad() {

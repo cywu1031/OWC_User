@@ -197,6 +197,23 @@ export class TabsPage {
             ratio *= 100
             this.shareService.daily_water_usage_header = "Daily water usage: " + ratio.toString() + '%'
 
+            this.callGetCrops()
+          });
+        } else {
+          this.showError("Get water history failed");
+        }
+      },
+      error => {
+        this.showError(error);
+      });
+  }
+
+  callGetCrops() {
+    this.backendService.getCrops().subscribe(data => {
+        if (data && 200 === data.status) {
+          setTimeout(() => {
+            this.shareService.crops = data.json()
+
             this.shareService.isDataAvailable = true
             this.loading.dismiss()
           });

@@ -25,6 +25,11 @@
     </ion-item>
 
     <ion-item>
+        <h2>Crop:</h2>
+        <ion-badge item-right color="primary">{{crop_name}}</ion-badge>
+    </ion-item>
+
+    <ion-item>
         <h2>Field capacity:</h2>
         <ion-badge item-right color="primary">{{farm.field_capacity}}</ion-badge>
     </ion-item>
@@ -35,12 +40,23 @@
     </ion-item>
 
     <ion-item>
+        <h2>Garden size:</h2>
+        <ion-badge item-right color="primary">{{farm.acreage}}</ion-badge>
+    </ion-item>
+
+    <ion-item>
         <h2>MAD:</h2>
         <ion-badge item-right color="primary">{{farm.mad}}</ion-badge>
+    </ion-item>
+
+    <ion-item>
+        <h2>Water pouring time:</h2>
+        <ion-badge item-right color="primary">{{farm.water_pouring_time}}</ion-badge>
     </ion-item>
 
     <ion-item>
         <h2>Description:</h2>
         <ion-badge item-right color="primary">{{farm.description}}</ion-badge>
     </ion-item>
+
 </ion-content>

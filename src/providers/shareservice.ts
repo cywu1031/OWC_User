@@ -27,6 +27,8 @@ export class ShareService {
 
     daily_water_usage_header: any
 
+    crops: any
+
     constructor() {
         this.title = 'Dashboard'
 
@@ -53,6 +55,8 @@ export class ShareService {
         this.real_time_data_range = 60 // minutes
 
         this.isDataAvailable = false
+
+        this.crops = []
     }
 
     public updateCropUser() {

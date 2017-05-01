@@ -207,4 +207,19 @@ export class BackendService {
          });
     });
   }
+
+  public getCrops() {
+    return Observable.create(observer => {
+      var url = this.baseUrl + 'crops' 
+
+      this.http.get(url)
+        .subscribe(data => {
+          observer.next(data);
+          observer.complete();
+         }, error => {
+           observer.next(null);
+           observer.complete();
+         });
+    });
+  }
 }
