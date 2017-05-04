@@ -20,6 +20,13 @@
     </ion-item>
 
     <ion-item>
+        <ion-label stacked>Crop</ion-label>
+        <ion-select [(ngModel)]="farm.crop_id" interface="action-sheet">
+          <ion-option  *ngFor="let crop of shareService.crops" value={{crop._id}}>{{crop.name}}</ion-option>
+        </ion-select>
+    </ion-item>
+
+    <ion-item>
         <ion-label stacked>Stage</ion-label>
         <ion-input type="text" [(ngModel)]="farm.stage"></ion-input>
     </ion-item>
@@ -41,23 +48,15 @@
 
     <ion-row>
         <ion-col>
-            <!-- <ion-item> -->
-            <ion-label stacked>MAD: {{farm.mad}}</ion-label> 
-            
+            <ion-label stacked>MAD: {{farm.mad}}</ion-label>   
             <ion-range min="0" max="45" [(ngModel)]="farm.mad">
                 </ion-range>
-           
-            <!-- </ion-item> -->
         </ion-col>
 
         <ion-col>
-            <!-- <ion-item> -->
-            <ion-label stacked>Water pouring time: {{farm.water_pouring_time}} ms</ion-label> 
-            
+            <ion-label stacked>Water pouring time: {{farm.water_pouring_time}} ms</ion-label>   
             <ion-range min="500" max="5000" [(ngModel)]="farm.water_pouring_time">
             </ion-range>
-                
-            <!-- </ion-item> -->
         </ion-col>
     </ion-row>
 

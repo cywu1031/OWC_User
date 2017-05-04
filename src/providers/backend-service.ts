@@ -222,4 +222,36 @@ export class BackendService {
          });
     });
   }
+
+  public createCropUser(cropUser) {
+    return Observable.create(observer => {
+      var url = this.baseUrl + 'crop-user' 
+      var data = JSON.stringify(cropUser)
+      let headers = new Headers({ 'Content-Type': 'application/json' });
+
+      this.http.post(url, data, {headers:headers})
+        .subscribe(data => {
+          observer.next(data);
+          observer.complete();
+         }, error => {
+           observer.next(null);
+           observer.complete();
+         });
+    });
+  }
+
+  public deleteCropUser(crop_user_id) {
+    return Observable.create(observer => {
+      var url = this.baseUrl + 'crop-user/' + crop_user_id;
+
+      this.http.delete(url)
+        .subscribe(data => {
+          observer.next(data);
+          observer.complete();
+         }, error => {
+           observer.next(null);
+           observer.complete();
+         });
+    });
+  }
 }

@@ -23,6 +23,17 @@
         <ion-label>Manual irrigation</ion-label>
         <ion-toggle color="secondary" checked="false" [(ngModel)]="irrigate" (ionChange)="toggleChanged()"></ion-toggle>
       </ion-item>
+      <ion-row>
+        <ion-col>
+        </ion-col>
+        <ion-col>
+          <div *ngIf="irrigate">
+            <iframe width="420" height="315" src="http://www.youtube.com/embed/o9ybl5h6MXw" frameborder="0" allowfullscreen></iframe>
+          </div>
+        </ion-col>
+         <ion-col>
+        </ion-col>
+      </ion-row>
     </ion-grid>
 
   </ion-list>
