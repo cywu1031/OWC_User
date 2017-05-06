@@ -3,7 +3,7 @@
     <ion-title>Menu</ion-title>
   </ion-toolbar>
   
-  <ion-list menuToggle radio-group [(ngModel)]="shareService.selected_crop_user">
+  <ion-list menuToggle radio-group [(ngModel)]="clicked_crop_user">
     <ion-list-header>Your farms</ion-list-header>
 
     <ion-item *ngFor="let farm of shareService.crop_user, let i = index">

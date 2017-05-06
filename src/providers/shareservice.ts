@@ -1,4 +1,6 @@
 import * as moment from 'moment-timezone';
+import * as io from 'socket.io-client';
+
 
 export class ShareService {  
     title: string
@@ -29,6 +31,9 @@ export class ShareService {
 
     crops: any
 
+    socket: any
+
+    daily_limit: any
     constructor() {
         this.title = 'Dashboard'
 
@@ -57,6 +62,10 @@ export class ShareService {
         this.isDataAvailable = false
 
         this.crops = []
+    }
+
+    public connectSocket(url) {
+        this.socket = io.connect(url);
     }
 
     public updateCropUser() {

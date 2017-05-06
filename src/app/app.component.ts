@@ -17,6 +17,7 @@ export class MyApp {
   rootPage = LoginPage;
   @ViewChild('myNav') nav;
   loading: Loading;
+  clicked_crop_user: any
  
   constructor(platform: Platform, public alertCtrl: AlertController, private backendService: BackendService, 
               private shareService: ShareService, public http: Http, private zone: NgZone, 
@@ -32,7 +33,7 @@ export class MyApp {
       StatusBar.styleDefault();
       Splashscreen.hide();
     });
-
+    this.clicked_crop_user = 0
   }
 
   ngAfterViewInit() {
@@ -65,7 +66,10 @@ export class MyApp {
   }
 
   selectedFarm() {
+    this.shareService.socket.emit('unregister', this.shareService.getCropUserId())
+    this.shareService.selected_crop_user = this.clicked_crop_user
     this.shareService.updateCropUser()
+    this.shareService.socket.emit('register', this.shareService.getCropUserId())
 
     this.shareService.isDataAvailable = false
     
@@ -95,7 +99,7 @@ export class MyApp {
 
           this.shareService.real_time_sensor_data[sensor_idx][0].data = new Array(sensor_history.length) 
           this.shareService.real_time_sensor_data_label[sensor_idx][0] = new Array(sensor_history.length)
-
+          this.shareService.real_time_sensor_data[sensor_idx][0].label = this.shareService.sensor_info[crop_user_idx][sensor_idx].name
           for (var i = 0;i < sensor_history.length; ++i) {
             this.shareService.real_time_sensor_data[sensor_idx][0].data[i] = parseFloat(sensor_history[i].value)
             var datetime = sensor_history[i].creation_date.split('T')
@@ -126,7 +130,7 @@ export class MyApp {
             var water_history = data.json()
 
             this.shareService.real_time_water_consumption_data[0][0].data = new Array(water_history.length) 
-            this.shareService.real_time_water_consumption_label[0][0] = new Array(water_history.length)
+            this.shareService.real_time_water_consumption_label[0] = new Array(water_history.length)
 
             for (var i = 0;i < water_history.length; ++i) {
               this.shareService.real_time_water_consumption_data[0][0].data[i] = parseFloat(water_history[i].water_consumption)
@@ -181,18 +185,16 @@ export class MyApp {
           setTimeout(() => {
             var limit = data.json()
 
-            this.shareService.real_time_daily_water_usage_data[1] = parseFloat(limit.prediction) - this.shareService.real_time_daily_water_usage_data[0]
+            this.shareService.daily_limit = parseFloat(limit.prediction)
+            this.shareService.real_time_daily_water_usage_data[1] = this.shareService.daily_limit - this.shareService.real_time_daily_water_usage_data[0]
             
-            var ratio = 0            
             if (this.shareService.real_time_daily_water_usage_data[1] < 0) {
               this.shareService.real_time_daily_water_usage_data[1] = 0
-              ratio = this.shareService.real_time_daily_water_usage_data[0] / parseFloat(limit.prediction)
-            } else if (0 != this.shareService.real_time_daily_water_usage_data[1]) {
-              ratio = this.shareService.real_time_daily_water_usage_data[0] / this.shareService.real_time_daily_water_usage_data[1]
             }
+
+            var ratio = 100.0 * (this.shareService.real_time_daily_water_usage_data[0] / this.shareService.daily_limit)
             
-            ratio *= 100
-            this.shareService.daily_water_usage_header = "Daily water usage: " + ratio.toString() + '%'
+            this.shareService.daily_water_usage_header = "Daily water usage: " + ratio.toFixed(2) + '%'
 
             this.shareService.isDataAvailable = true
             this.loading.dismiss()

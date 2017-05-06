@@ -18,6 +18,7 @@ export class BackendService {
   constructor(public http: Http, private shareService: ShareService) {
     this.baseUrl = 'https://sjsusmartfarm-backend.herokuapp.com/';
     // this.baseUrl = 'http://localhost:3000/';
+    this.shareService.connectSocket(this.baseUrl)
   }
 
   public login(credentials) {

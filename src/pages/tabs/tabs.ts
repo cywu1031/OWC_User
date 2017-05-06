@@ -31,7 +31,7 @@ export class TabsPage {
   }
 
   tabChange(tab: Tab){
-
+    this.shareService.title = tab.tabTitle
   }
 
   loadSensorInfo() {
@@ -129,7 +129,7 @@ export class TabsPage {
             var water_history = data.json()
 
             this.shareService.real_time_water_consumption_data[0][0].data = new Array(water_history.length) 
-            this.shareService.real_time_water_consumption_label[0][0] = new Array(water_history.length)
+            this.shareService.real_time_water_consumption_label[0] = new Array(water_history.length)
 
             for (var i = 0;i < water_history.length; ++i) {
               this.shareService.real_time_water_consumption_data[0][0].data[i] = parseFloat(water_history[i].water_consumption)
@@ -184,18 +184,16 @@ export class TabsPage {
           setTimeout(() => {
             var limit = data.json()
 
-            this.shareService.real_time_daily_water_usage_data[1] = parseFloat(limit.prediction) - this.shareService.real_time_daily_water_usage_data[0]
+            this.shareService.daily_limit = parseFloat(limit.prediction)
+            this.shareService.real_time_daily_water_usage_data[1] = this.shareService.daily_limit - this.shareService.real_time_daily_water_usage_data[0]
             
-            var ratio = 0            
             if (this.shareService.real_time_daily_water_usage_data[1] < 0) {
               this.shareService.real_time_daily_water_usage_data[1] = 0
-              ratio = this.shareService.real_time_daily_water_usage_data[0] / parseFloat(limit.prediction)
-            } else if (0 != this.shareService.real_time_daily_water_usage_data[1]) {
-              ratio = this.shareService.real_time_daily_water_usage_data[0] / this.shareService.real_time_daily_water_usage_data[1]
             }
+
+            var ratio = 100.0 * (this.shareService.real_time_daily_water_usage_data[0] / this.shareService.daily_limit)
             
-            ratio *= 100
-            this.shareService.daily_water_usage_header = "Daily water usage: " + ratio.toString() + '%'
+            this.shareService.daily_water_usage_header = "Daily water usage: " + ratio.toFixed(2) + '%'
 
             this.callGetCrops()
           });
@@ -213,9 +211,7 @@ export class TabsPage {
         if (data && 200 === data.status) {
           setTimeout(() => {
             this.shareService.crops = data.json()
-
-            this.shareService.isDataAvailable = true
-            this.loading.dismiss()
+            this.setupSocket()
           });
         } else {
           this.showError("Get water history failed");
@@ -224,6 +220,14 @@ export class TabsPage {
       error => {
         this.showError(error);
       });
+  }
+
+  setupSocket() {
+    var crop_user_id = this.shareService.getCropUserId()
+    this.shareService.socket.emit('register', crop_user_id)
+    
+    this.shareService.isDataAvailable = true
+    this.loading.dismiss()
   }
 
   showLoading() {

@@ -30,6 +30,9 @@ export class HistoryPage {
       private backendService: BackendService, private chartSetting: ChartSetting) {
       this.shareService.title = 'History';
       this.isSearchDataAvailable = false
+
+      this.start_date_time = new Date().toISOString()
+      this.end_date_time = new Date().toISOString()
   }
 
   ionViewDidLoad() {

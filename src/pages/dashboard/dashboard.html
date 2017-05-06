@@ -19,19 +19,17 @@
     </ion-item>
 
     <ion-grid *ngIf="manual">
-      <ion-item>
-        <ion-label>Manual irrigation</ion-label>
-        <ion-toggle color="secondary" checked="false" [(ngModel)]="irrigate" (ionChange)="toggleChanged()"></ion-toggle>
-      </ion-item>
       <ion-row>
         <ion-col>
+          <div *ngIf="irrigate">
+              <iframe width="420" height="315" src="http://www.youtube.com/embed/G4K4U5hnZSA" frameborder="0" allowfullscreen></iframe>
+            </div>
         </ion-col>
         <ion-col>
-          <div *ngIf="irrigate">
-            <iframe width="420" height="315" src="http://www.youtube.com/embed/o9ybl5h6MXw" frameborder="0" allowfullscreen></iframe>
-          </div>
-        </ion-col>
-         <ion-col>
+          <ion-item>
+            <ion-label>Manual irrigation</ion-label>
+            <ion-toggle color="secondary" checked="false" [(ngModel)]="irrigate" (ionChange)="toggleChanged()"></ion-toggle>
+          </ion-item>
         </ion-col>
       </ion-row>
     </ion-grid>
@@ -42,7 +40,7 @@
     <ion-list-header>
       Water usage
     </ion-list-header>
-    <ion-row align-items-center  *ngIf="shareService.isDataAvailable">
+    <ion-row align-items-center *ngIf="shareService.isDataAvailable">
 
       <ion-col>
         <ion-card>
@@ -50,13 +48,15 @@
             Water consumptions
           </ion-card-header>
           <ion-card-content>
-            <canvas id="water_canvas" baseChart
-                      [datasets]="shareService.real_time_water_consumption_data[0]"
-                      [labels]="shareService.real_time_water_consumption_label[0]"
-                      [options]="chartSetting.lineChartOptions"
-                      [colors]="chartSetting.lineChartColors[0]"
-                      [legend]="chartSetting.lineChartLegend"
-                      [chartType]="chartSetting.lineChartType"></canvas>
+            <div>
+              <canvas #real_time_water=base-chart baseChart
+                        [datasets]="shareService.real_time_water_consumption_data[0]"
+                        [labels]="shareService.real_time_water_consumption_label[0]"
+                        [options]="chartSetting.lineChartOptions"
+                        [colors]="chartSetting.lineChartColors[0]"
+                        [legend]="chartSetting.lineChartLegend"
+                        [chartType]="chartSetting.lineChartType"></canvas>
+            </div>
           </ion-card-content>
         </ion-card>
       </ion-col>
@@ -68,7 +68,7 @@
             {{shareService.daily_water_usage_header}}
           </ion-card-header>
           <ion-card-content>
-            <canvas baseChart
+            <canvas #water_usage=base-chart baseChart
                       [data]="shareService.real_time_daily_water_usage_data"
                       [labels]="shareService.real_time_daily_water_usage_label"
                       [chartType]="chartSetting.doughnutChartType"></canvas>
@@ -86,17 +86,51 @@
     </ion-list-header>
 
     <ion-row align-items-center  *ngIf="shareService.isDataAvailable">
-      <ion-col *ngFor="let sensor of shareService.sensor_info[shareService.selected_crop_user]; let i = index">
+      <ion-col>
         <ion-card>
           <ion-card-header>
-            {{sensor.name}}
+            {{shareService.sensor_info[shareService.selected_crop_user][0].name}}
           </ion-card-header>
           <ion-card-content>
-            <canvas baseChart
-                    [datasets]="shareService.real_time_sensor_data[i]"
-                    [labels]="shareService.real_time_sensor_data_label[i]"
+            <canvas #hum=base-chart baseChart
+                    [datasets]="shareService.real_time_sensor_data[0]"
+                    [labels]="shareService.real_time_sensor_data_label[0]"
                     [options]="chartSetting.lineChartOptions"
-                    [colors]="chartSetting.lineChartColors[i]"
+                    [colors]="chartSetting.lineChartColors[0]"
+                    [legend]="chartSetting.lineChartLegend"
+                    [chartType]="chartSetting.lineChartType"></canvas>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+
+      <ion-col>
+        <ion-card>
+          <ion-card-header>
+            {{shareService.sensor_info[shareService.selected_crop_user][1].name}}
+          </ion-card-header>
+          <ion-card-content>
+            <canvas #soil=base-chart baseChart
+                    [datasets]="shareService.real_time_sensor_data[1]"
+                    [labels]="shareService.real_time_sensor_data_label[1]"
+                    [options]="chartSetting.lineChartOptions"
+                    [colors]="chartSetting.lineChartColors[1]"
+                    [legend]="chartSetting.lineChartLegend"
+                    [chartType]="chartSetting.lineChartType"></canvas>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+
+      <ion-col>
+        <ion-card>
+          <ion-card-header>
+            {{shareService.sensor_info[shareService.selected_crop_user][2].name}}
+          </ion-card-header>
+          <ion-card-content>
+            <canvas #temp=base-chart baseChart
+                    [datasets]="shareService.real_time_sensor_data[2]"
+                    [labels]="shareService.real_time_sensor_data_label[2]"
+                    [options]="chartSetting.lineChartOptions"
+                    [colors]="chartSetting.lineChartColors[2]"
                     [legend]="chartSetting.lineChartLegend"
                     [chartType]="chartSetting.lineChartType"></canvas>
           </ion-card-content>
