@@ -86,7 +86,7 @@
     </ion-list-header>
 
     <ion-row align-items-center  *ngIf="shareService.isDataAvailable">
-      <ion-col>
+      <ion-col *ngIf="1 <= shareService.real_time_sensor_data.length">
         <ion-card>
           <ion-card-header>
             {{shareService.sensor_info[shareService.selected_crop_user][0].name}}
@@ -103,7 +103,7 @@
         </ion-card>
       </ion-col>
 
-      <ion-col>
+      <ion-col *ngIf="2 <= shareService.real_time_sensor_data.length">
         <ion-card>
           <ion-card-header>
             {{shareService.sensor_info[shareService.selected_crop_user][1].name}}
@@ -120,7 +120,7 @@
         </ion-card>
       </ion-col>
 
-      <ion-col>
+      <ion-col *ngIf="3 <= shareService.real_time_sensor_data.length">
         <ion-card>
           <ion-card-header>
             {{shareService.sensor_info[shareService.selected_crop_user][2].name}}
@@ -129,6 +129,23 @@
             <canvas #temp=base-chart baseChart
                     [datasets]="shareService.real_time_sensor_data[2]"
                     [labels]="shareService.real_time_sensor_data_label[2]"
+                    [options]="chartSetting.lineChartOptions"
+                    [colors]="chartSetting.lineChartColors[2]"
+                    [legend]="chartSetting.lineChartLegend"
+                    [chartType]="chartSetting.lineChartType"></canvas>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+
+      <ion-col *ngIf="4 <= shareService.real_time_sensor_data.length">
+        <ion-card>
+          <ion-card-header>
+            {{shareService.sensor_info[shareService.selected_crop_user][3].name}}
+          </ion-card-header>
+          <ion-card-content>
+            <canvas #temp=base-chart baseChart
+                    [datasets]="shareService.real_time_sensor_data[3]"
+                    [labels]="shareService.real_time_sensor_data_label[3]"
                     [options]="chartSetting.lineChartOptions"
                     [colors]="chartSetting.lineChartColors[2]"
                     [legend]="chartSetting.lineChartLegend"
