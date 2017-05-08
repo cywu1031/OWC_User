@@ -35,7 +35,7 @@
     </ion-item>
  -->
     <ion-list>
-      <ion-row align-items-center>
+      <ion-row align-items-left>
         
         <ion-col>
           <div>
@@ -46,7 +46,6 @@
         </ion-col>
 
         <ion-col>
-          <div>
             <ion-list>
               <ion-item>
                 <ion-label>Range</ion-label>
@@ -57,7 +56,6 @@
                 </ion-select>
               </ion-item>
             </ion-list>
-          </div>
         </ion-col>
 
         <ion-col>
@@ -73,7 +71,7 @@
 
       <ion-row>
         <ion-col *ngIf="data_ready">
-          <ion-card  class="chartcontainer">
+          <ion-card>
             <ion-badge class="app-font-20" color="danger" item-right>Consumed: {{consumption_sum}} ml</ion-badge>
             <ion-badge class="app-font-20" color="secondary" item-right>Prediction: {{prediction_sum}} ml</ion-badge>
             <ion-badge class="app-font-20" item-right>Optimized: {{optimized}} %</ion-badge>
