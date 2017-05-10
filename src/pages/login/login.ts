@@ -45,6 +45,7 @@ export class LoginPage {
     this.backendService.getCropUser(this.shareService.user_info._id).subscribe(data => {
         if (data && 200 === data.status) {
           setTimeout(() => {
+            this.shareService.crop_user = []
             for (var i = data.json().length - 1;i >= 0; --i) {
               this.shareService.crop_user.push(data.json()[i])
             }

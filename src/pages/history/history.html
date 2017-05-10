@@ -10,76 +10,94 @@
 </ion-header>
 
 <ion-content class="grid-basic-page">
-    <ion-list>
-      <ion-item>
-        <ion-label>Start</ion-label>
-        <ion-datetime displayFormat="MM DD YYYY, HH:mm:ss" [(ngModel)]="start_date_time"></ion-datetime>
+  <ion-list>
+      <ion-row align-items-left>
+        
+        <ion-col>
+          <div>
+            <ion-list-header>
+              History records
+            </ion-list-header>
+          </div>
+        </ion-col>
+
+        <ion-col>
+          <ion-item>
+            <ion-label>Start</ion-label>
+            <ion-datetime displayFormat="MM DD YYYY, HH:mm:ss" [(ngModel)]="start_date_time"></ion-datetime>
+          </ion-item>
+        </ion-col>
+
+        <ion-col>
+          <ion-item>
+            <ion-label>End</ion-label>
+            <ion-datetime displayFormat="MM DD YYYY, HH:mm:ss" [(ngModel)]="end_date_time"></ion-datetime>
+          </ion-item>
+        </ion-col>
+
+        <ion-col>
+          <ion-item>  
+              <button ion-button class="submit-btn" round full type="submit" (click)="submitSelected()">Submit</button>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+
+      <ion-item *ngIf="isSearchDataAvailable">
+        <ion-list>
+          <ion-list-header>
+            Water usage
+          </ion-list-header>
+
+            <ion-row>
+              <ion-col>
+                <ion-card class="chartcontainer">
+                  <ion-card-header>
+                    Water consumption history
+                  </ion-card-header>
+                  <ion-card-content>
+                    
+                      <canvas baseChart
+                              [data]="water_history_data"
+                              [labels]="water_history_label"
+                              [options]="chartSetting.lineChartOptions"
+                              [colors]="chartSetting.lineChartColors[0]"
+                              [legend]="chartSetting.lineChartLegend"
+                              [chartType]="chartSetting.lineChartType"></canvas>
+                    
+                  </ion-card-content>
+                </ion-card>
+              </ion-col>
+            </ion-row>
+        </ion-list>
       </ion-item>
 
-      <ion-item>
-        <ion-label>End</ion-label>
-        <ion-datetime displayFormat="MM DD YYYY, HH:mm:ss" [(ngModel)]="end_date_time"></ion-datetime>
-      </ion-item>
-
-      <ion-item>  
-          <button ion-button class="submit-btn" round full type="submit" (click)="submitSelected()">Submit</button>
-      </ion-item>
-    </ion-list>
-    
-    <ion-item *ngIf="isSearchDataAvailable">
-      <ion-list>
-        <ion-list-header>
-          Water usage
-        </ion-list-header>
-
-          <ion-row>
-            <ion-col>
-              <ion-card class="chartcontainer">
-                <ion-card-header>
-                  Water consumption history
-                </ion-card-header>
-                <ion-card-content>
+      <ion-item  *ngIf="isSearchDataAvailable">
+        <ion-list>
+          <ion-list-header>
+            Sensors
+          </ion-list-header>
+          <ion-row  align-items-center>
+            <ion-col *ngFor="let sensor of shareService.sensor_info[shareService.selected_crop_user]; let i = index">
+              <ion-card>
+                  <ion-card-header>
+                    {{sensor.name}}
+                  </ion-card-header>
                   
+                  <ion-card-content>
                     <canvas baseChart
-                            [data]="water_history_data"
-                            [labels]="water_history_label"
+                            [datasets]="sensor_data[i]"
+                            [labels]="labels[i]"
                             [options]="chartSetting.lineChartOptions"
-                            [colors]="chartSetting.lineChartColors[0]"
+                            [colors]="chartSetting.lineChartColors[i]"
                             [legend]="chartSetting.lineChartLegend"
                             [chartType]="chartSetting.lineChartType"></canvas>
-                  
-                </ion-card-content>
+                  </ion-card-content>
+
               </ion-card>
             </ion-col>
           </ion-row>
-      </ion-list>
-    </ion-item>
-
-    <ion-item  *ngIf="isSearchDataAvailable">
-      <ion-list>
-        <ion-list-header>
-          Sensors
-        </ion-list-header>
-        <ion-row  align-items-center>
-          <ion-col *ngFor="let sensor of shareService.sensor_info[shareService.selected_crop_user]; let i = index">
-            <ion-card>
-                <ion-card-header>
-                  {{sensor.name}}
-                </ion-card-header>
-                
-                <ion-card-content>
-                  <canvas baseChart
-                          [datasets]="sensor_data[i]"
-                          [labels]="labels[i]"
-                          [options]="chartSetting.lineChartOptions"
-                          [colors]="chartSetting.lineChartColors[i]"
-                          [legend]="chartSetting.lineChartLegend"
-                          [chartType]="chartSetting.lineChartType"></canvas>
-                </ion-card-content>
-
-            </ion-card>
-          </ion-col>
-        </ion-row>
-      </ion-list>
-    </ion-item>
+        </ion-list>
+      </ion-item>
+  </ion-list>
+    
 </ion-content>

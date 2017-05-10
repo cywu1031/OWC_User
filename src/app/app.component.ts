@@ -56,6 +56,8 @@ export class MyApp {
           handler: () => {
             this.backendService.logout().subscribe(succ => {
                 this.nav.setRoot(LoginPage)
+                this.shareService.isDataAvailable = false
+                this.shareService.selected_crop_user = '0'
             });
           }
         }

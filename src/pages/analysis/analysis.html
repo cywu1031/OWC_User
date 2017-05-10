@@ -10,30 +10,6 @@
 </ion-header>
 
 <ion-content class="grid-basic-page">
-    <!-- <ion-item>
-        <ion-icon name="ios-warning" item-left></ion-icon>
-        Water usage prediction
-        <ion-badge item-right></ion-badge>
-    </ion-item>
-
-    <ion-item>
-      <ion-icon name="ios-warning" item-left></ion-icon>
-      Evaportraspiration (ETc)
-      <ion-badge item-right></ion-badge>
-    </ion-item> -->
-
-    <!-- <ion-item>
-      <ion-icon name="ios-warning" item-left></ion-icon>
-      Field capacity
-      <ion-badge item-right>{{shareService.crop_user[shareService.selected_crop_user].field_capacity}}</ion-badge>
-    </ion-item>
-
-    <ion-item>
-      <ion-icon name="ios-warning" item-left></ion-icon>
-      Managed Allowable Deficit (MAD)
-      <ion-badge item-right>{{shareService.crop_user[shareService.selected_crop_user].mad}}</ion-badge>
-    </ion-item>
- -->
     <ion-list>
       <ion-row align-items-left>
         
@@ -46,28 +22,25 @@
         </ion-col>
 
         <ion-col>
-            <ion-list>
-              <ion-item>
-                <ion-label>Range</ion-label>
-                <ion-select [(ngModel)]="range" (ionChange)="onRangeSelected($event)"  interface="action-sheet">
-                  <ion-option value="ThreeDays">Three days</ion-option>
-                  <ion-option value="OneWeek">One week</ion-option>
-                  <ion-option value="OneMonth">One month</ion-option>
-                </ion-select>
-              </ion-item>
-            </ion-list>
+          <ion-item>
+            <ion-label>Start</ion-label>
+            <ion-datetime displayFormat="MM DD YYYY" [(ngModel)]="start_date_time"></ion-datetime>
+          </ion-item>
         </ion-col>
 
         <ion-col>
+          <ion-item>
+            <ion-label>End</ion-label>
+            <ion-datetime displayFormat="MM DD YYYY" [(ngModel)]="end_date_time"></ion-datetime>
+          </ion-item>
         </ion-col>
 
         <ion-col>
+          <ion-item>  
+              <button ion-button class="submit-btn" round full type="submit" (click)="onRangeSelected()">Submit</button>
+          </ion-item>
         </ion-col>
-
-        <ion-col>
-        </ion-col>
-
-      </ion-row> 
+      </ion-row>
 
       <ion-row>
         <ion-col *ngIf="data_ready">

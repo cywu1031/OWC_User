@@ -26,6 +26,8 @@ export class AnalysisPage {
   prediction_sum: any
   consumption_sum: any
   optimized: any
+  start_date_time: any
+  end_date_time: any
   constructor(public navCtrl: NavController, private shareService: ShareService, 
     private backendService: BackendService, private loadingCtrl: LoadingController, 
     private alertCtrl: AlertController, private chartSetting: ChartSetting) {
@@ -33,7 +35,8 @@ export class AnalysisPage {
       this.data_ready = false
       this.range = 'ThreeDays'
 
-      this.onRangeSelected()
+      this.start_date_time = new Date().toISOString()
+      this.end_date_time = new Date().toISOString()
   }
 
   onRangeSelected() {
@@ -52,29 +55,10 @@ export class AnalysisPage {
   }
 
   getWaterPredictionDaily() {    
-    var end = this.shareService.getBayTime()
-    end.subtract(1, 'days')
-    end.set('hour', 23);
-    end.set('minute', 59);
-    end.set('second', 59);
-    var start = this.shareService.getBayTime()
-
-    if ('ThreeDays' === this.range) {
-      start.subtract(3, 'days')
-    } else if ('OneWeek' ===  this.range) {
-      start.subtract(1, 'weeks')
-    } else {
-      start.subtract(1, 'months')
-    }
-
-    start.set('hour', 0);
-    start.set('minute', 0);
-    start.set('second', 0);
-
     var selected_crop_user_idx = parseInt(this.shareService.selected_crop_user)
     var crop_user_id = this.shareService.crop_user[selected_crop_user_idx]._id
 
-    this.backendService.getPredictionRangeDaily(crop_user_id, start.format(), end.format()).subscribe(data => {
+    this.backendService.getPredictionRangeDaily(crop_user_id, this.start_date_time, this.end_date_time).subscribe(data => {
         if (data && 200 === data.status) {
           setTimeout(() => {
             var daily_prediction = data.json()
@@ -88,7 +72,7 @@ export class AnalysisPage {
             }
 
             this.prediction_sum = this.prediction_sum.toFixed(2)
-            this.getWaterUsageDaily(crop_user_id, start, end)
+            this.getWaterUsageDaily(crop_user_id)
           });
         } else {
           this.showError("Get getPredictionRangeDaily failed");
@@ -99,8 +83,15 @@ export class AnalysisPage {
       });
   }
 
-  getWaterUsageDaily(crop_user_id, start, end) {
-    this.backendService.getWaterHistory(crop_user_id, start.format('MM-DD-YYYY HH:MM'), end.format('MM-DD-YYYY HH:MM')).subscribe(data => {
+  getWaterUsageDaily(crop_user_id) {
+    var split = this.start_date_time.split('T')
+    var start_date = split[0].split('-')
+    split = this.end_date_time.split('T')
+    var end_date = split[0].split('-')
+
+    var start = start_date[1] + '-' + start_date[2] + '-' + start_date[0] + ' 00:00'
+    var end = end_date[1] + '-' + end_date[2] + '-' + end_date[0] + ' 00:00'
+    this.backendService.getWaterHistory(crop_user_id, start, end).subscribe(data => {
         if (data && 200 === data.status) {
           setTimeout(() => {
             var water_history = data.json()
