@@ -44,7 +44,7 @@
 
       <ion-row>
         <ion-col *ngIf="data_ready">
-          <ion-card>
+          <ion-card class="chartcontainer">
             <ion-badge class="app-font-20" color="danger" item-right>Consumed: {{consumption_sum}} ml</ion-badge>
             <ion-badge class="app-font-20" color="secondary" item-right>Prediction: {{prediction_sum}} ml</ion-badge>
             <ion-badge class="app-font-20" item-right>Optimized: {{optimized}} %</ion-badge>
