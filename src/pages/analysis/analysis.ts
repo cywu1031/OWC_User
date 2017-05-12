@@ -58,6 +58,8 @@ export class AnalysisPage {
     var selected_crop_user_idx = parseInt(this.shareService.selected_crop_user)
     var crop_user_id = this.shareService.crop_user[selected_crop_user_idx]._id
 
+    this.start_date_time = this.start_date_time.split('T')[0] + 'T00:00:00.000Z'
+    this.end_date_time = this.end_date_time.split('T')[0] + 'T23:59:59.000Z'
     this.backendService.getPredictionRangeDaily(crop_user_id, this.start_date_time, this.end_date_time).subscribe(data => {
         if (data && 200 === data.status) {
           setTimeout(() => {
@@ -90,7 +92,7 @@ export class AnalysisPage {
     var end_date = split[0].split('-')
 
     var start = start_date[1] + '-' + start_date[2] + '-' + start_date[0] + ' 00:00'
-    var end = end_date[1] + '-' + end_date[2] + '-' + end_date[0] + ' 00:00'
+    var end = end_date[1] + '-' + end_date[2] + '-' + end_date[0] + ' 23:59'
     this.backendService.getWaterHistory(crop_user_id, start, end).subscribe(data => {
         if (data && 200 === data.status) {
           setTimeout(() => {
